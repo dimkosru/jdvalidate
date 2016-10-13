@@ -69,7 +69,7 @@ There are three types of option:
 
 Via the ajax option we define how to send the form.
 It can be ```null``` if we do not want the form to be sent.
-Or it can be an object with the following options;
+Or it can be an object with the following options:
 
 #### url
 default: ```null```
