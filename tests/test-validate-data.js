@@ -1,7 +1,7 @@
-import { createCheckableElement } from '../test-utils/utils.es6';
+import { createCheckableElement } from '../test-utils/utils.js';
 
-import { validateField, validateData } from '../src/lib/validate-data.es6';
-import methods from '../src/lib/methods.es6';
+import { validateField, validateData } from '../src/lib/validate-data.js';
+import methods from '../src/lib/methods.js';
 
 // todo move to test context
 const rules = {

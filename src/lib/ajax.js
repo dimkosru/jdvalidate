@@ -1,4 +1,4 @@
-import { translate } from '../i18n/jedi-validate-i18n.es6';
+import { translate } from '../i18n/jedi-validate-i18n.js';
 
 /**
  * Sending request

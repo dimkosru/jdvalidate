@@ -1,89 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/jedi-validate.es6 | API Document</title>
-  <link type="text/css" rel="stylesheet" href="css/style.css">
-  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
-  <script src="script/prettify/prettify.js"></script>
-  
-  
-  <script src="script/manual.js"></script>
-</head>
-<body class="layout-container" data-ice="rootContainer">
-
-<header>
-  <a href="./">Home</a>
-  
-  <a href="identifiers.html">Reference</a>
-  <a href="source.html">Source</a>
-  
-  <a data-ice="repoURL" href="https://github.com/dmitriytat/jedi-validate" class="repo-url-github">Repository</a>
-  <div class="search-box">
-  <span>
-    <img src="./image/search.png">
-    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
-  </span>
-    <ul class="search-result"></ul>
-  </div>
-</header>
-
-<nav class="navigation" data-ice="nav"><div>
-  <ul>
-    
-  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">i18n</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addTranslation">addTranslation</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-translate">translate</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">lib</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ajax">ajax</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-convertData">convertData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-convertNameToPath">convertNameToPath</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getQueryPart">getQueryPart</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createObject">createObject</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getData">getData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInputData">getInputData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInputName">getInputName</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInputValue">getInputValue</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRadioGroupValue">getRadioGroupValue</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValueByName">getValueByName</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValueByPath">getValueByPath</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFormOptions">getFormOptions</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInputRules">getInputRules</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isCheckable">isCheckable</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateData">validateData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateField">validateField</a></span></span></li>
-</ul>
-</div>
-</nav>
-
-<div class="content" data-ice="content"><h1 data-ice="title">src/jedi-validate.es6</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import deepmerge from &apos;deepmerge&apos;;
-import { getData, getInputData, getValueByName } from &apos;./lib/get-data.es6&apos;;
-import { convertData } from &apos;./lib/convert-data.es6&apos;;
-import { addTranslation, translate } from &apos;./i18n/jedi-validate-i18n.es6&apos;;
-import { getFormOptions, getInputRules } from &apos;./lib/get-options.es6&apos;;
-import { validateData, validateField } from &apos;./lib/validate-data.es6&apos;;
-import { ajax } from &apos;./lib/ajax.es6&apos;;
-import defaultMethods from &apos;./lib/methods.es6&apos;;
+import deepmerge from 'deepmerge';
+import { getData, getInputData, getValueByName } from './lib/get-data.js';
+import { convertData } from './lib/convert-data.js';
+import { addTranslation, translate } from './i18n/jedi-validate-i18n.js';
+import { getFormOptions, getInputRules } from './lib/get-options.js';
+import { validateData, validateField } from './lib/validate-data.js';
+import { ajax } from './lib/ajax.js';
+import defaultMethods from './lib/methods.js';
 
 class JediValidate {
     /**
      * Object with fields
-     * @type {Object.&lt;string, Element&gt;}
+     * @type {Object.<string, Element>}
      */
     fields = {};
     /**
      * Object with inputs nodes
-     * @type {Object.&lt;string, HTMLInputElement|HTMLSelectElement|Array&gt;}
+     * @type {Object.<string, HTMLInputElement|HTMLSelectElement|Array>}
      */
     inputs = {};
     /**
      * Object with message nodes
-     * @type {Object.&lt;string, Element&gt;}
+     * @type {Object.<string, Element>}
      */
     messages = {};
     /**
      * Object with error message
-     * @type {Object.&lt;string, Object.&lt;string, string&gt;&gt;}
+     * @type {Object.<string, Object.<string, string>>}
      */
     errorMessages = {};
     /**
@@ -93,12 +35,12 @@ class JediValidate {
     data = {};
     /**
      * Validate methods
-     * @type {Object.&lt;string, {func: Function, message: string}&gt;}
+     * @type {Object.<string, {func: Function, message: string}>}
      */
     methods = { ...defaultMethods };
     /**
      * Validator options
-     * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: (function(object)), error: (function(object.&lt;string, Array.&lt;string&gt;&gt;))}, clean: boolean, redirect: boolean, language: string, translations: {}}}
+     * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: (function(object)), error: (function(object.<string, Array.<string>>))}, clean: boolean, redirect: boolean, language: string, translations: {}}}
      */
     options = {};
     /**
@@ -116,24 +58,24 @@ class JediValidate {
         const defaultOptions = {
             ajax: {
                 url: null,
-                enctype: &apos;application/x-www-form-urlencoded&apos;,
-                sendType: &apos;serialize&apos;, // &apos;serialize&apos;, &apos;formData&apos;, &apos;json&apos;
-                method: &apos;GET&apos;,
+                enctype: 'application/x-www-form-urlencoded',
+                sendType: 'serialize', // 'serialize', 'formData', 'json'
+                method: 'GET',
             },
             rules: {},
             messages: {},
             containers: {
-                parent: &apos;form-group&apos;,
-                message: &apos;help-block&apos;,
-                baseMessage: &apos;base-error&apos;,
+                parent: 'form-group',
+                message: 'help-block',
+                baseMessage: 'base-error',
             },
             states: {
-                error: &apos;error&apos;,
-                valid: &apos;valid&apos;,
-                pristine: &apos;pristine&apos;,
-                dirty: &apos;dirty&apos;,
+                error: 'error',
+                valid: 'valid',
+                pristine: 'pristine',
+                dirty: 'dirty',
             },
-            formStatePrefix: &apos;jedi-&apos;,
+            formStatePrefix: 'jedi-',
             callbacks: {
                 success() {
                 },
@@ -142,7 +84,7 @@ class JediValidate {
             },
             clean: true,
             redirect: true,
-            language: &apos;en&apos;,
+            language: 'en',
             translations: {},
         };
 
@@ -161,8 +103,8 @@ class JediValidate {
         this.rules = { ...this.options.rules };
 
         // todo rewrite translations
-        Object.keys(this.options.translations).forEach((language) =&gt; {
-            Object.keys(this.options.translations[language]).forEach((translation) =&gt; {
+        Object.keys(this.options.translations).forEach((language) => {
+            Object.keys(this.options.translations[language]).forEach((translation) => {
                 addTranslation(
                     translation,
                     this.options.translations[language][translation],
@@ -195,20 +137,20 @@ class JediValidate {
      * Return object with working elements
      * @param root Root element for search
      * @param options Object with selectors
-     * @returns {{form: Element, inputs: NodeList, baseMessage: Element}}
+     * @returns {{form: HTMLFormElement, inputs: NodeList, baseMessage: Element}}
      */
     static cacheNodes(root, options) {
         return {
-            form: root.querySelector(&apos;form&apos;),
-            inputs: root.querySelectorAll(&apos;[name]&apos;),
+            form: root.querySelector('form'),
+            inputs: root.querySelectorAll('form [name]'),
             baseMessage: root.querySelector(`.${options.containers.baseMessage}`),
         };
     }
 
     ready() {
-        this.nodes.form.setAttribute(&apos;novalidate&apos;, &apos;novalidate&apos;);
+        this.nodes.form.setAttribute('novalidate', 'novalidate');
 
-        this.nodes.form.addEventListener(&apos;submit&apos;, (event) =&gt; {
+        this.nodes.form.addEventListener('submit', (event) => {
             event.preventDefault();
             this.data = getData(this.inputs);
 
@@ -219,8 +161,8 @@ class JediValidate {
                 this.errorMessages,
             );
 
-            if (errors &amp;&amp; Object.keys(errors).filter(name =&gt; errors[name]).length !== 0) {
-                Object.keys(errors).forEach(name =&gt;
+            if (errors && Object.keys(errors).filter(name => errors[name]).length !== 0) {
+                Object.keys(errors).forEach(name =>
                     JediValidate.markField(
                         this.fields[name],
                         this.messages[name],
@@ -239,7 +181,7 @@ class JediValidate {
                 return;
             }
 
-            if (this.options.ajax &amp;&amp; this.options.ajax.url) {
+            if (this.options.ajax && this.options.ajax.url) {
                 event.preventDefault();
             } else {
                 try {
@@ -258,10 +200,10 @@ class JediValidate {
             });
         });
 
-        this.nodes.inputs.forEach((input) =&gt; {
-            // fixme &quot;name&quot; and &quot;name in data&quot; not the same
-            // name === &quot;phone[]&quot;,
-            // data: { phone: [] } - name === &quot;phone&quot;
+        this.nodes.inputs.forEach((input) => {
+            // fixme "name" and "name in data" not the same
+            // name === "phone[]",
+            // data: { phone: [] } - name === "phone"
             const name = input.name;
 
             if (this.inputs[name]) {
@@ -284,10 +226,12 @@ class JediValidate {
                     }
 
                     field = field.parentNode;
-                } while (field);
+                } while (field && field.classList);
 
                 if (!this.fields[name]) {
-                    throw new Error(&apos;Have no parent field&apos;);
+                    console.warn(`Input ${name} has no parent field`);
+                    delete this.inputs[name];
+                    return;
                 }
 
                 this.fields[name].classList.add(this.options.states.pristine);
@@ -297,7 +241,7 @@ class JediValidate {
                 if (messageElement) {
                     this.messages[name] = messageElement;
                 } else {
-                    this.messages[name] = document.createElement(&apos;div&apos;);
+                    this.messages[name] = document.createElement('div');
                     this.messages[name].classList.add(this.options.containers.message);
                     this.fields[name].appendChild(this.messages[name]);
                 }
@@ -306,20 +250,20 @@ class JediValidate {
                 const inputRules = getInputRules(input);
                 this.rules[name] = deepmerge(inputRules, this.rules[name]);
 
-                Object.keys(this.rules[name]).forEach((rule) =&gt; {
+                Object.keys(this.rules[name]).forEach((rule) => {
                     if (this.rules[name][rule]) {
                         this.fields[name].classList.add(rule);
                     }
                 });
             }
 
-            input.addEventListener(&apos;change&apos;, () =&gt; {
+            input.addEventListener('change', () => {
                 this.fields[name].classList.remove(this.options.states.dirty);
 
                 const inputData = getInputData(input);
                 const value = getValueByName(name, inputData);
 
-                // fixme don&apos;t work with 2 inputs phone[]
+                // fixme don't work with 2 inputs phone[]
                 this.data = {
                     ...this.data,
                     ...inputData,
@@ -342,7 +286,7 @@ class JediValidate {
                 );
             });
 
-            input.addEventListener(&apos;input&apos;, () =&gt; {
+            input.addEventListener('input', () => {
                 this.fields[name].classList.remove(this.options.states.pristine);
                 this.fields[name].classList.add(this.options.states.dirty);
             });
@@ -359,7 +303,7 @@ class JediValidate {
      * @param {string|FormData} options.data
      */
     send(options) {
-        ajax(options).then((response) =&gt; {
+        ajax(options).then((response) => {
             if (response.validationErrors) {
                 try {
                     this.options.callbacks.error(response.validationErrors);
@@ -368,15 +312,15 @@ class JediValidate {
                 }
 
                 if (response.validationErrors.base) {
-                    this.nodes.baseMessage.innerHTML = response.validationErrors.base.join(&apos;, &apos;);
+                    this.nodes.baseMessage.innerHTML = response.validationErrors.base.join(', ');
                     this.root.classList.add(this.options.formStatePrefix + this.options.states.error); // eslint-disable-line max-len
                     this.root.classList.remove(this.options.formStatePrefix + this.options.states.valid); // eslint-disable-line max-len
                     delete response.validationErrors.base; // eslint-disable-line no-param-reassign
                 } else {
-                    this.nodes.baseMessage.innerHTML = &apos;&apos;;
+                    this.nodes.baseMessage.innerHTML = '';
                 }
 
-                Object.keys(response.validationErrors).forEach(name =&gt;
+                Object.keys(response.validationErrors).forEach(name =>
                     JediValidate.markField(
                         this.fields[name],
                         this.messages[name],
@@ -391,7 +335,7 @@ class JediValidate {
                     console.error(e);
                 }
 
-                if (this.options.redirect &amp;&amp; response.redirect) {
+                if (this.options.redirect && response.redirect) {
                     window.location.href = response.redirect;
                     return;
                 }
@@ -400,10 +344,10 @@ class JediValidate {
                     this.nodes.form.reset();
                 }
             }
-        }).catch(({ method, url, status, statusText }) =&gt; {
+        }).catch(({ method, url, status, statusText }) => {
             console.warn(`${method} ${url} ${status} (${statusText})`);
 
-            this.nodes.baseMessage.innerHTML = translate(&apos;Can not send form!&apos;, this.options.language);
+            this.nodes.baseMessage.innerHTML = translate('Can not send form!', this.options.language);
             this.root.classList.add(this.options.formStatePrefix + this.options.states.error); // eslint-disable-line max-len
             this.root.classList.remove(this.options.formStatePrefix + this.options.states.valid); // eslint-disable-line max-len
         });
@@ -414,11 +358,11 @@ class JediValidate {
      * Collect data
      * @param {string} name - field name
      */
-    collect(name = &apos;&apos;) {
+    collect(name = '') {
         if (name) {
             const inputData = getInputData(this.inputs[name]);
 
-            // fixme don&apos;t work with 2 inputs phone[]
+            // fixme don't work with 2 inputs phone[]
             this.data = {
                 ...this.data,
                 ...inputData,
@@ -438,7 +382,7 @@ class JediValidate {
      * @param errors
      */
     static markField(field, message, states, errors) {
-        if (errors &amp;&amp; errors.length) {
+        if (errors && errors.length) {
             JediValidate.markError(field, message, states, errors);
         } else {
             JediValidate.markValid(field, message, states);
@@ -451,7 +395,7 @@ class JediValidate {
      * @param {Element} message
      * @param {string} error
      * @param {string} valid
-     * @param {Array.&lt;string&gt;} errors
+     * @param {Array.<string>} errors
      */
     static markError(field, message, { error, valid }, errors) {
         if (!field || !message) {
@@ -461,7 +405,7 @@ class JediValidate {
         field.classList.add(error);
         field.classList.remove(valid);
 
-        message.innerHTML = errors.join(&apos;, &apos;); // eslint-disable-line no-param-reassign
+        message.innerHTML = errors.join(', '); // eslint-disable-line no-param-reassign
     }
 
     /**
@@ -479,7 +423,7 @@ class JediValidate {
         field.classList.add(valid);
         field.classList.remove(error);
 
-        message.innerHTML = &apos;&apos;; // eslint-disable-line no-param-reassign
+        message.innerHTML = ''; // eslint-disable-line no-param-reassign
     }
 
     /**
@@ -501,34 +445,17 @@ class JediValidate {
      * @param {object} messages
      * @param {object} methods
      * @param {string} language
-     * @returns {Object.&lt;string, Object.&lt;string, string&gt;&gt;}
+     * @returns {Object.<string, Object.<string, string>>}
      */
     static initErrorMessages(rules, messages, methods, language) {
-        return Object.keys(rules).reduce((names, name) =&gt; ({
+        return Object.keys(rules).reduce((names, name) => ({
             ...names,
-            [name]: Object.keys(rules[name]).reduce((ruleNames, method) =&gt; ({
+            [name]: Object.keys(rules[name]).reduce((ruleNames, method) => ({
                 ...ruleNames,
-                [method]: translate((messages[name] &amp;&amp; messages[name][method]) || (methods[method] &amp;&amp; methods[method].message) || &apos;&apos;, language),
+                [method]: translate((messages[name] && messages[name][method]) || (methods[method] && methods[method].message) || '', language),
             }), {}),
         }), {});
     }
 }
 
 module.exports = JediValidate;
-</code></pre>
-
-</div>
-
-<footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
-</footer>
-
-<script src="script/search_index.js"></script>
-<script src="script/search.js"></script>
-<script src="script/pretty-print.js"></script>
-<script src="script/inherited-summary.js"></script>
-<script src="script/test-summary.js"></script>
-<script src="script/inner-link.js"></script>
-<script src="script/patch-for-local.js"></script>
-</body>
-</html>

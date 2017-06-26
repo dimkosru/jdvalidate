@@ -2,8 +2,8 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        'jedi-validate': './src/jedi-validate.es6',
-        'jedi-validate.min': './src/jedi-validate.es6',
+        'jedi-validate': './src/jedi-validate.js',
+        'jedi-validate.min': './src/jedi-validate.js',
     },
     devtool: 'source-map',
     output: {
@@ -23,9 +23,9 @@ module.exports = {
             //     loader: 'eslint-loader',
             // },
             {
-                test: /\.es6/,
+                test: /\.js/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader',
+                loader: 'babel-loader?cacheDirectory=cache',
             },
             {
                 test: /\.json$/,

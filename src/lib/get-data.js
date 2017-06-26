@@ -1,6 +1,6 @@
 import deepmerge from 'deepmerge';
 
-import { convertNameToPath } from './convert-data.es6';
+import { convertNameToPath } from './convert-data.js';
 
 /**
  * Create object by path and value

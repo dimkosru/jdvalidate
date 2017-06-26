@@ -1,10 +1,10 @@
-import { createCheckableElement } from '../test-utils/utils.es6';
+import { createCheckableElement } from '../test-utils/utils.js';
 
 import {
     convertNameToPath,
     convertData,
     getQueryPart,
-} from '../src/lib/convert-data.es6';
+} from '../src/lib/convert-data.js';
 
 const data = {
     phone: '92356234',

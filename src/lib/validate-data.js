@@ -1,4 +1,4 @@
-import { getValueByName } from './get-data.es6';
+import { getValueByName } from './get-data.js';
 
 /**
  * Check rule for dependencies

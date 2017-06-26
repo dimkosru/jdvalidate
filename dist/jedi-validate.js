@@ -16,9 +16,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -42,9 +42,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -73,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,154 +80,91 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.translate = translate;
-exports.addTranslation = addTranslation;
-var dictionary = __webpack_require__(8);
+var index$2 = function isMergeableObject(value) {
+	return isNonNullObject(value) && isNotSpecial(value)
+};
 
-/**
- * Default language
- * @type {string}
- */
-var defaultLanguage = 'en';
-
-/**
- * Translate phrase
- * @param {string} text - phrase to translate
- * @param {string} language - language token
- * @returns {string} - translated text
- */
-function translate(text) {
-  var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultLanguage;
-
-  return dictionary[language] && dictionary[language][text] || text;
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
 }
 
-/**
- * Add translation pair to dictionary
- * @param {string} sourceText - phrase
- * @param {string} translatedText - translated phrase
- * @param {string} language - language token
- */
-function addTranslation(sourceText, translatedText) {
-  var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultLanguage;
+function isNotSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
 
-  if (dictionary[language] === undefined) {
-    dictionary[language] = {};
-  }
-
-  dictionary[language][sourceText] = translatedText;
+	return stringValue !== '[object RegExp]'
+		&& stringValue !== '[object Date]'
 }
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true;
+    return (clone && index$2(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice();
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument);
+        } else if (index$2(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument);
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument));
+        }
+    });
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {};
+    if (index$2(target)) {
+        Object.keys(target).forEach(function(key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument);
+        });
+    }
+    Object.keys(source).forEach(function(key) {
+        if (!index$2(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument);
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument);
+        }
+    });
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var array = Array.isArray(source);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
+    var arrayMerge = options.arrayMerge || defaultArrayMerge;
+
+    if (array) {
+        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+};
+
+var index = deepmerge;
+
+module.exports = index;
+
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-exports.getQueryPart = getQueryPart;
-exports.convertNameToPath = convertNameToPath;
-exports.convertData = convertData;
-/**
- * Create part url for serialize method
- * @param {string} name
- * @param {object|Array|string} data
- * @returns {string} - part of url
- */
-function getQueryPart(name, data) {
-    if (Array.isArray(data)) {
-        return data.reduce(function (part, index) {
-            return part + getQueryPart(name + '[' + index + ']', data[index]);
-        }, '');
-    } else if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object') {
-        return Object.keys(data).reduce(function (part, index) {
-            return part + getQueryPart(name + '[' + index + ']', data[index]);
-        }, '');
-    }
-
-    return name + '=' + encodeURIComponent(data) + '&';
-}
-
-/**
- * Name regexp for conversion to path
- * @type {RegExp}
- */
-var NAME = /(\[(\w*)\]|\w*)/gi;
-
-/**
- * Convert name of input to path array
- * @param {string} name - name of input
- * @returns {Array} - path to value in data object
- */
-function convertNameToPath(name) {
-    var path = [];
-
-    var matches = NAME.exec(name);
-    while (matches !== null) {
-        if (matches.index === NAME.lastIndex) {
-            NAME.lastIndex += 1;
-        }
-
-        path.push(matches[2] || matches[1]);
-
-        matches = NAME.exec(name);
-    }
-
-    return path;
-}
-
-/**
- * Convert data object to value for sending
- * @param {object} data - data object
- * @param {string} type - type of conversion
- * @returns {string|FormData} - output value
- */
-function convertData(data, type) {
-    var convertedData = void 0;
-
-    switch (type) {
-        case 'serialize':
-            convertedData = Object.keys(data).reduce(function (query, name) {
-                return '' + query + getQueryPart(name, data[name]);
-            }, '');
-            return convertedData.length ? convertedData.slice(0, -1) : '';
-        case 'formData':
-            return Object.keys(data).reduce(function (formData, name) {
-                if (data[name] instanceof FileList) {
-                    if (data[name].length > 1) {
-                        for (var i = 0; i < data[name].length; i += 1) {
-                            formData.append(name + '[' + i + ']', data[name][i]);
-                        }
-                    } else if (data[name].length === 1) {
-                        formData.append(name, data[name][0]);
-                    }
-                } else if (_typeof(data[name]) === 'object') {
-                    Object.keys(data[name]).forEach(function (key) {
-                        return formData.append(name + '[' + key + ']', data[name][key]);
-                    });
-                } else {
-                    formData.append(name, data[name]);
-                }
-
-                return formData;
-            }, new FormData());
-        case 'json':
-        default:
-            return JSON.stringify(data);
-    }
-}
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -248,11 +182,11 @@ exports.getInputName = getInputName;
 exports.getInputData = getInputData;
 exports.getData = getData;
 
-var _deepmerge = __webpack_require__(3);
+var _deepmerge = __webpack_require__(0);
 
 var _deepmerge2 = _interopRequireDefault(_deepmerge);
 
-var _convertData = __webpack_require__(1);
+var _convertData = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -381,419 +315,160 @@ function getData(inputs) {
 }
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.getQueryPart = getQueryPart;
+exports.convertNameToPath = convertNameToPath;
+exports.convertData = convertData;
+/**
+ * Create part url for serialize method
+ * @param {string} name
+ * @param {object|Array|string} data
+ * @returns {string} - part of url
+ */
+function getQueryPart(name, data) {
+    if (Array.isArray(data)) {
+        return data.reduce(function (part, index) {
+            return part + getQueryPart(name + '[' + index + ']', data[index]);
+        }, '');
+    } else if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object') {
+        return Object.keys(data).reduce(function (part, index) {
+            return part + getQueryPart(name + '[' + index + ']', data[index]);
+        }, '');
+    }
+
+    return name + '=' + encodeURIComponent(data) + '&';
+}
+
+/**
+ * Name regexp for conversion to path
+ * @type {RegExp}
+ */
+var NAME = /(\[(\w*)\]|\w*)/gi;
+
+/**
+ * Convert name of input to path array
+ * @param {string} name - name of input
+ * @returns {Array} - path to value in data object
+ */
+function convertNameToPath(name) {
+    var path = [];
+
+    var matches = NAME.exec(name);
+    while (matches !== null) {
+        if (matches.index === NAME.lastIndex) {
+            NAME.lastIndex += 1;
+        }
+
+        path.push(matches[2] || matches[1]);
+
+        matches = NAME.exec(name);
+    }
+
+    return path;
+}
+
+/**
+ * Convert data object to value for sending
+ * @param {object} data - data object
+ * @param {string} type - type of conversion
+ * @returns {string|FormData} - output value
+ */
+function convertData(data, type) {
+    var convertedData = void 0;
+
+    switch (type) {
+        case 'serialize':
+            convertedData = Object.keys(data).reduce(function (query, name) {
+                return '' + query + getQueryPart(name, data[name]);
+            }, '');
+            return convertedData.length ? convertedData.slice(0, -1) : '';
+        case 'formData':
+            return Object.keys(data).reduce(function (formData, name) {
+                if (data[name] instanceof FileList) {
+                    if (data[name].length > 1) {
+                        for (var i = 0; i < data[name].length; i += 1) {
+                            formData.append(name + '[' + i + ']', data[name][i]);
+                        }
+                    } else if (data[name].length === 1) {
+                        formData.append(name, data[name][0]);
+                    }
+                } else if (_typeof(data[name]) === 'object') {
+                    Object.keys(data[name]).forEach(function (key) {
+                        return formData.append(name + '[' + key + ']', data[name][key]);
+                    });
+                } else {
+                    formData.append(name, data[name]);
+                }
+
+                return formData;
+            }, new FormData());
+        case 'json':
+        default:
+            return JSON.stringify(data);
+    }
+}
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
-    if (true) {
-        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if (typeof exports === 'object') {
-        module.exports = factory();
-    } else {
-        root.deepmerge = factory();
-    }
-}(this, function () {
+"use strict";
 
-function isMergeableObject(val) {
-    var nonNullObject = val && typeof val === 'object'
 
-    return nonNullObject
-        && Object.prototype.toString.call(val) !== '[object RegExp]'
-        && Object.prototype.toString.call(val) !== '[object Date]'
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.translate = translate;
+exports.addTranslation = addTranslation;
+var dictionary = __webpack_require__(5);
+
+/**
+ * Default language
+ * @type {string}
+ */
+var defaultLanguage = 'en';
+
+/**
+ * Translate phrase
+ * @param {string} text - phrase to translate
+ * @param {string} language - language token
+ * @returns {string} - translated text
+ */
+function translate(text) {
+  var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultLanguage;
+
+  return dictionary[language] && dictionary[language][text] || text;
 }
 
-function emptyTarget(val) {
-    return Array.isArray(val) ? [] : {}
+/**
+ * Add translation pair to dictionary
+ * @param {string} sourceText - phrase
+ * @param {string} translatedText - translated phrase
+ * @param {string} language - language token
+ */
+function addTranslation(sourceText, translatedText) {
+  var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultLanguage;
+
+  if (dictionary[language] === undefined) {
+    dictionary[language] = {};
+  }
+
+  dictionary[language][sourceText] = translatedText;
 }
-
-function cloneIfNecessary(value, optionsArgument) {
-    var clone = optionsArgument && optionsArgument.clone === true
-    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
-}
-
-function defaultArrayMerge(target, source, optionsArgument) {
-    var destination = target.slice()
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            destination[i] = cloneIfNecessary(e, optionsArgument)
-        } else if (isMergeableObject(e)) {
-            destination[i] = deepmerge(target[i], e, optionsArgument)
-        } else if (target.indexOf(e) === -1) {
-            destination.push(cloneIfNecessary(e, optionsArgument))
-        }
-    })
-    return destination
-}
-
-function mergeObject(target, source, optionsArgument) {
-    var destination = {}
-    if (isMergeableObject(target)) {
-        Object.keys(target).forEach(function (key) {
-            destination[key] = cloneIfNecessary(target[key], optionsArgument)
-        })
-    }
-    Object.keys(source).forEach(function (key) {
-        if (!isMergeableObject(source[key]) || !target[key]) {
-            destination[key] = cloneIfNecessary(source[key], optionsArgument)
-        } else {
-            destination[key] = deepmerge(target[key], source[key], optionsArgument)
-        }
-    })
-    return destination
-}
-
-function deepmerge(target, source, optionsArgument) {
-    var array = Array.isArray(source);
-    var options = optionsArgument || { arrayMerge: defaultArrayMerge }
-    var arrayMerge = options.arrayMerge || defaultArrayMerge
-
-    if (array) {
-        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
-    } else {
-        return mergeObject(target, source, optionsArgument)
-    }
-}
-
-deepmerge.all = function deepmergeAll(array, optionsArgument) {
-    if (!Array.isArray(array) || array.length < 2) {
-        throw new Error('first argument should be an array with at least two elements')
-    }
-
-    // we are sure there are at least 2 values, so it is safe to have no initial value
-    return array.reduce(function(prev, next) {
-        return deepmerge(prev, next, optionsArgument)
-    })
-}
-
-return deepmerge
-
-}));
-
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.ajax = ajax;
-
-var _jediValidateI18n = __webpack_require__(0);
-
-/**
- * Sending request
- * @param {{url: string, enctype: string, sendType: string, method: string, data: string|FormData}} options - Sending options
- * @returns {Promise}
- * todo rewrite to fetch
- */
-function ajax(options) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-
-        xhr.open(options.method, options.url + (options.method.toUpperCase() === 'GET' ? '?' + options.data : ''), true);
-
-        if (options.sendType === 'serialize') {
-            xhr.setRequestHeader('Content-type', options.enctype);
-        } else if (options.sendType === 'json') {
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        }
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var response = {};
-
-                    try {
-                        response = JSON.parse(xhr.responseText);
-                    } catch (e) {
-                        response.validationErrors = { base: [(0, _jediValidateI18n.translate)('JSON parsing error')] }; // todo rewrite translate now dont work
-                    }
-
-                    resolve(response);
-                } else {
-                    reject({
-                        xhr: xhr,
-                        method: options.method,
-                        url: options.url,
-                        status: xhr.status,
-                        statusText: xhr.statusText
-                    });
-                }
-            }
-        };
-
-        xhr.send(options.method.toUpperCase() === 'POST' ? options.data : '');
-    });
-}
-
-exports.default = ajax;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-exports.getFormOptions = getFormOptions;
-exports.getInputRules = getInputRules;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-/**
- * Get ajax options from form
- * @param {HTMLFormElement} form - form element
- * @returns {{ajax: {url: string, method: string, enctype: string, sendType: *}}} - object with options for sending
- */
-function getFormOptions(form) {
-    var enctype = form.getAttribute('enctype');
-
-    return {
-        ajax: {
-            enctype: enctype,
-            url: form.getAttribute('action'),
-            method: form.getAttribute('method'),
-            sendType: enctype === 'multipart/form-data' ? 'formData' : undefined
-        }
-    };
-}
-
-/**
- * Get validate options from input attribute of className
- * @param {HTMLInputElement|HTMLSelectElement} input - input for validation
- * @returns {object} - rules
- */
-function getInputRules(input) {
-    var defaultRules = ['required', 'email', 'tel', 'url'];
-
-    var rules = defaultRules.reduce(function (inputRules, rule) {
-        return _extends({}, inputRules, _defineProperty({}, rule, input.hasAttribute(rule) || input.type === rule || input.classList.contains(rule)));
-    }, {});
-
-    return _extends({}, rules, {
-        regexp: input.hasAttribute('pattern') ? new RegExp(input.getAttribute('pattern')) : undefined
-    });
-}
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-exports.default = {
-    required: {
-        func: function func(value) {
-            if (!value) return false;
-            if (Array.isArray(value) && value.length === 0) return false;
-            if (value instanceof FileList && value.length === 0) return false;
-            if (typeof value === 'string' && value.trim() === '') return false;
-
-            return true;
-        },
-        message: 'This field is required'
-    },
-    regexp: {
-        func: function func(value, regexp) {
-            return regexp.test(value);
-        },
-        message: 'Please, provide correct value'
-    },
-    email: {
-        func: function func(value) {
-            return (/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(value)
-            );
-        },
-        message: 'This email is incorrect'
-    },
-    filesize: {
-        func: function func(value, size) {
-            return [].concat(_toConsumableArray(value)).reduce(function (r, file) {
-                return file.size < size && r;
-            }, true);
-        }, // eslint-disable-line max-len
-        message: 'This file is too large'
-    },
-    extension: {
-        func: function func(value, extensions) {
-            return [].concat(_toConsumableArray(value)).reduce(function (r, file) {
-                return extensions.indexOf(file.name.split('.').pop()) !== -1 && r;
-            }, true);
-        }, // eslint-disable-line max-len
-        message: 'This extension is not supported'
-    },
-    tel: {
-        func: function func(value) {
-            return (/^([\+]+)*[0-9\x20\x28\x29\-]{5,20}$/.test(value)
-            );
-        },
-        message: 'This phone number is incorrect'
-    },
-    url: {
-        func: function func(value) {
-            return (/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(value)
-            );
-        }, // eslint-disable-line max-len
-        message: 'Wrong url'
-    }
-};
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-exports.isCheckable = isCheckable;
-exports.validateField = validateField;
-exports.validateData = validateData;
-
-var _getData = __webpack_require__(2);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
-
-/**
- * Check rule for dependencies
- * @param {*} params - params of validation
- * @param {object} data - data of form
- * @returns {*} - params of validation or null if rule not checkable
- */
-function isCheckable(params, data) {
-    if (!params) return null;
-
-    var checkable = true;
-    var param = params;
-
-    if (Array.isArray(params)) {
-        var dependencies = [];
-
-        var _params = _toArray(params);
-
-        param = _params[0];
-        dependencies = _params.slice(1);
-
-        if (!param) return null;
-
-        try {
-            checkable = dependencies.reduce(function (required, dependency) {
-                return required && (typeof dependency === 'function' && dependency(data) || !!data[dependency]);
-            }, checkable);
-        } catch (e) {
-            console.warn('Dependency function error: ' + e.toString());
-        }
-    }
-
-    return checkable ? param : null;
-}
-
-/**
- * Validate field
- * @param {object} rules - object with rules for validation
- * @param {object} methods - validation methods
- * @param {string|FileList|Array} value - value of input
- * @param {string} name - name on input
- * @param {object} errorMessages - object with error messages
- * @param {object} data - data of form
- * @returns {Array.<string>} - array of field errors
- */
-function validateField(rules, methods, value, name, errorMessages, data) {
-    var isEmpty = !methods.required.func(value);
-
-    var isRequired = isCheckable(rules.required, data);
-
-    if (isEmpty && isRequired) {
-        return [errorMessages[name].required];
-    }
-
-    if (isEmpty) {
-        return [];
-    }
-
-    return Object.keys(rules).reduce(function (errors, method) {
-        var params = isCheckable(rules[method], data);
-
-        if (params === null) return errors;
-
-        if (methods[method]) {
-            var valid = methods[method].func(value, params);
-
-            if (!valid) {
-                errors.push(errorMessages[name][method]);
-            }
-        } else {
-            errors.push('Method "' + method + '" not found');
-        }
-
-        return errors;
-    }, []);
-}
-
-/**
- * Validate data object
- * @param {object} rules - object with rules for validation
- * @param {object} methods - validation methods
- * @param {object} data - data object
- * @param {object} errorMessages - object with error messages
- * @returns {object.<string, Array.<string>>} - object of fields error arrays
- */
-function validateData(rules, methods, data, errorMessages) {
-    return Object.keys(rules).reduce(function (obj, name) {
-        var value = (0, _getData.getValueByName)(name, data);
-        var errors = validateField(rules[name], methods, value, name, errorMessages, data);
-        return _extends({}, obj, _defineProperty({}, name, errors.length ? errors : undefined));
-    }, {});
-}
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = {
-	"ru": {
-		"This field is required": "Это поле необходимо заполнить",
-		"Please, provide correct value": "Пожалуйста, введите корректное значение",
-		"This email is incorrect": "Пожалуйста, введите корректный адрес электронной почты",
-		"This file is too large": "Попробуйте загрузить файл поменьше",
-		"This extension is not supported": "Пожалуйста, выберите файл с правильным расширением",
-		"This phone number is incorrect": "Не корректный номер телефона",
-		"Wrong url": "Не корректный url",
-		"Can not send form!": "Форма не отправлена!",
-		"JSON parsing error": "Ошибка разбора JSON"
-	}
-};
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -803,23 +478,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _deepmerge = __webpack_require__(3);
+var _deepmerge = __webpack_require__(0);
 
 var _deepmerge2 = _interopRequireDefault(_deepmerge);
 
-var _getData = __webpack_require__(2);
+var _getData = __webpack_require__(1);
 
-var _convertData = __webpack_require__(1);
+var _convertData = __webpack_require__(2);
 
-var _jediValidateI18n = __webpack_require__(0);
+var _jediValidateI18n = __webpack_require__(3);
 
-var _getOptions = __webpack_require__(5);
+var _getOptions = __webpack_require__(6);
 
 var _validateData = __webpack_require__(7);
 
-var _ajax = __webpack_require__(4);
+var _ajax = __webpack_require__(8);
 
-var _methods = __webpack_require__(6);
+var _methods = __webpack_require__(9);
 
 var _methods2 = _interopRequireDefault(_methods);
 
@@ -1031,10 +706,12 @@ var JediValidate = function () {
                         }
 
                         field = field.parentNode;
-                    } while (field);
+                    } while (field && field.classList);
 
                     if (!_this2.fields[name]) {
-                        throw new Error('Have no parent field');
+                        console.warn('Input ' + name + ' has no parent field');
+                        delete _this2.inputs[name];
+                        return;
                     }
 
                     _this2.fields[name].classList.add(_this2.options.states.pristine);
@@ -1212,7 +889,7 @@ var JediValidate = function () {
          * Return object with working elements
          * @param root Root element for search
          * @param options Object with selectors
-         * @returns {{form: Element, inputs: NodeList, baseMessage: Element}}
+         * @returns {{form: HTMLFormElement, inputs: NodeList, baseMessage: Element}}
          */
 
     }, {
@@ -1220,7 +897,7 @@ var JediValidate = function () {
         value: function cacheNodes(root, options) {
             return {
                 form: root.querySelector('form'),
-                inputs: root.querySelectorAll('[name]'),
+                inputs: root.querySelectorAll('form [name]'),
                 baseMessage: root.querySelector('.' + options.containers.baseMessage)
             };
         }
@@ -1297,6 +974,327 @@ var JediValidate = function () {
 }();
 
 module.exports = JediValidate;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = {
+	"ru": {
+		"This field is required": "Это поле необходимо заполнить",
+		"Please, provide correct value": "Пожалуйста, введите корректное значение",
+		"This email is incorrect": "Пожалуйста, введите корректный адрес электронной почты",
+		"This file is too large": "Попробуйте загрузить файл поменьше",
+		"This extension is not supported": "Пожалуйста, выберите файл с правильным расширением",
+		"This phone number is incorrect": "Не корректный номер телефона",
+		"Wrong url": "Не корректный url",
+		"Can not send form!": "Форма не отправлена!",
+		"JSON parsing error": "Ошибка разбора JSON"
+	}
+};
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.getFormOptions = getFormOptions;
+exports.getInputRules = getInputRules;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/**
+ * Get ajax options from form
+ * @param {HTMLFormElement} form - form element
+ * @returns {{ajax: {url: string, method: string, enctype: string, sendType: *}}} - object with options for sending
+ */
+function getFormOptions(form) {
+    var enctype = form.getAttribute('enctype');
+
+    return {
+        ajax: {
+            enctype: enctype,
+            url: form.getAttribute('action'),
+            method: form.getAttribute('method'),
+            sendType: enctype === 'multipart/form-data' ? 'formData' : undefined
+        }
+    };
+}
+
+/**
+ * Get validate options from input attribute of className
+ * @param {HTMLInputElement|HTMLSelectElement} input - input for validation
+ * @returns {object} - rules
+ */
+function getInputRules(input) {
+    var defaultRules = ['required', 'email', 'tel', 'url'];
+
+    var rules = defaultRules.reduce(function (inputRules, rule) {
+        return _extends({}, inputRules, _defineProperty({}, rule, input.hasAttribute(rule) || input.type === rule || input.classList.contains(rule)));
+    }, {});
+
+    return _extends({}, rules, {
+        regexp: input.hasAttribute('pattern') ? new RegExp(input.getAttribute('pattern')) : undefined
+    });
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.isCheckable = isCheckable;
+exports.validateField = validateField;
+exports.validateData = validateData;
+
+var _getData = __webpack_require__(1);
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
+/**
+ * Check rule for dependencies
+ * @param {*} params - params of validation
+ * @param {object} data - data of form
+ * @returns {*} - params of validation or null if rule not checkable
+ */
+function isCheckable(params, data) {
+    if (!params) return null;
+
+    var checkable = true;
+    var param = params;
+
+    if (Array.isArray(params)) {
+        var dependencies = [];
+
+        var _params = _toArray(params);
+
+        param = _params[0];
+        dependencies = _params.slice(1);
+
+        if (!param) return null;
+
+        try {
+            checkable = dependencies.reduce(function (required, dependency) {
+                return required && (typeof dependency === 'function' && dependency(data) || !!data[dependency]);
+            }, checkable);
+        } catch (e) {
+            console.warn('Dependency function error: ' + e.toString());
+        }
+    }
+
+    return checkable ? param : null;
+}
+
+/**
+ * Validate field
+ * @param {object} rules - object with rules for validation
+ * @param {object} methods - validation methods
+ * @param {string|FileList|Array} value - value of input
+ * @param {string} name - name on input
+ * @param {object} errorMessages - object with error messages
+ * @param {object} data - data of form
+ * @returns {Array.<string>} - array of field errors
+ */
+function validateField(rules, methods, value, name, errorMessages, data) {
+    var isEmpty = !methods.required.func(value);
+
+    var isRequired = isCheckable(rules.required, data);
+
+    if (isEmpty && isRequired) {
+        return [errorMessages[name].required];
+    }
+
+    if (isEmpty) {
+        return [];
+    }
+
+    return Object.keys(rules).reduce(function (errors, method) {
+        var params = isCheckable(rules[method], data);
+
+        if (params === null) return errors;
+
+        if (methods[method]) {
+            var valid = methods[method].func(value, params);
+
+            if (!valid) {
+                errors.push(errorMessages[name][method]);
+            }
+        } else {
+            errors.push('Method "' + method + '" not found');
+        }
+
+        return errors;
+    }, []);
+}
+
+/**
+ * Validate data object
+ * @param {object} rules - object with rules for validation
+ * @param {object} methods - validation methods
+ * @param {object} data - data object
+ * @param {object} errorMessages - object with error messages
+ * @returns {object.<string, Array.<string>>} - object of fields error arrays
+ */
+function validateData(rules, methods, data, errorMessages) {
+    return Object.keys(rules).reduce(function (obj, name) {
+        var value = (0, _getData.getValueByName)(name, data);
+        var errors = validateField(rules[name], methods, value, name, errorMessages, data);
+        return _extends({}, obj, _defineProperty({}, name, errors.length ? errors : undefined));
+    }, {});
+}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ajax = ajax;
+
+var _jediValidateI18n = __webpack_require__(3);
+
+/**
+ * Sending request
+ * @param {{url: string, enctype: string, sendType: string, method: string, data: string|FormData}} options - Sending options
+ * @returns {Promise}
+ * todo rewrite to fetch
+ */
+function ajax(options) {
+    return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(options.method, options.url + (options.method.toUpperCase() === 'GET' ? '?' + options.data : ''), true);
+
+        if (options.sendType === 'serialize') {
+            xhr.setRequestHeader('Content-type', options.enctype);
+        } else if (options.sendType === 'json') {
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        }
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var response = {};
+
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        response.validationErrors = { base: [(0, _jediValidateI18n.translate)('JSON parsing error')] }; // todo rewrite translate now dont work
+                    }
+
+                    resolve(response);
+                } else {
+                    reject({
+                        xhr: xhr,
+                        method: options.method,
+                        url: options.url,
+                        status: xhr.status,
+                        statusText: xhr.statusText
+                    });
+                }
+            }
+        };
+
+        xhr.send(options.method.toUpperCase() === 'POST' ? options.data : '');
+    });
+}
+
+exports.default = ajax;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+exports.default = {
+    required: {
+        func: function func(value) {
+            if (!value) return false;
+            if (Array.isArray(value) && value.length === 0) return false;
+            if (value instanceof FileList && value.length === 0) return false;
+            if (typeof value === 'string' && value.trim() === '') return false;
+
+            return true;
+        },
+        message: 'This field is required'
+    },
+    regexp: {
+        func: function func(value, regexp) {
+            return regexp.test(value);
+        },
+        message: 'Please, provide correct value'
+    },
+    email: {
+        func: function func(value) {
+            return (/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(value)
+            );
+        },
+        message: 'This email is incorrect'
+    },
+    filesize: {
+        func: function func(value, size) {
+            return [].concat(_toConsumableArray(value)).reduce(function (r, file) {
+                return file.size < size && r;
+            }, true);
+        }, // eslint-disable-line max-len
+        message: 'This file is too large'
+    },
+    extension: {
+        func: function func(value, extensions) {
+            return [].concat(_toConsumableArray(value)).reduce(function (r, file) {
+                return extensions.indexOf(file.name.split('.').pop()) !== -1 && r;
+            }, true);
+        }, // eslint-disable-line max-len
+        message: 'This extension is not supported'
+    },
+    tel: {
+        func: function func(value) {
+            return (/^([\+]+)*[0-9\x20\x28\x29\-]{5,20}$/.test(value)
+            );
+        },
+        message: 'This phone number is incorrect'
+    },
+    url: {
+        func: function func(value) {
+            return (/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(value)
+            );
+        }, // eslint-disable-line max-len
+        message: 'Wrong url'
+    }
+};
 
 /***/ })
 /******/ ]);

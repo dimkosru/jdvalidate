@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/lib/methods.es6 | API Document</title>
+  <title data-ice="title">src/lib/validate-data.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -55,50 +55,103 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/lib/methods.es6</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default {
-    required: {
-        func: (value) =&gt; {
-            if (!value) return false;
-            if (Array.isArray(value) &amp;&amp; value.length === 0) return false;
-            if (value instanceof FileList &amp;&amp; value.length === 0) return false;
-            if (typeof value === &apos;string&apos; &amp;&amp; value.trim() === &apos;&apos;) return false;
+<div class="content" data-ice="content"><h1 data-ice="title">src/lib/validate-data.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { getValueByName } from &apos;./get-data.js&apos;;
 
-            return true;
-        },
-        message: &apos;This field is required&apos;,
-    },
-    regexp: {
-        func: (value, regexp) =&gt; regexp.test(value),
-        message: &apos;Please, provide correct value&apos;,
-    },
-    email: {
-        func: value =&gt; /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(value),
-        message: &apos;This email is incorrect&apos;,
-    },
-    filesize: {
-        func: (value, size) =&gt; [...value].reduce((r, file) =&gt; file.size &lt; size &amp;&amp; r, true), // eslint-disable-line max-len
-        message: &apos;This file is too large&apos;,
-    },
-    extension: {
-        func: (value, extensions) =&gt; [...value].reduce((r, file) =&gt; extensions.indexOf(file.name.split(&apos;.&apos;).pop()) !== -1 &amp;&amp; r, true), // eslint-disable-line max-len
-        message: &apos;This extension is not supported&apos;,
-    },
-    tel: {
-        func: value =&gt; /^([\+]+)*[0-9\x20\x28\x29\-]{5,20}$/.test(value),
-        message: &apos;This phone number is incorrect&apos;,
-    },
-    url: {
-        func: value =&gt; /[-a-zA-Z0-9@:%_\+.~#?&amp;//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&amp;//=]*)?/gi.test(value), // eslint-disable-line max-len
-        message: &apos;Wrong url&apos;,
-    },
-};
+/**
+ * Check rule for dependencies
+ * @param {*} params - params of validation
+ * @param {object} data - data of form
+ * @returns {*} - params of validation or null if rule not checkable
+ */
+export function isCheckable(params, data) {
+    if (!params) return null;
+
+    let checkable = true;
+    let param = params;
+
+    if (Array.isArray(params)) {
+        let dependencies = [];
+        [param, ...dependencies] = params;
+        if (!param) return null;
+
+        try {
+            checkable = dependencies
+                .reduce((required, dependency) =&gt; (required &amp;&amp; ((typeof dependency === &apos;function&apos; &amp;&amp; dependency(data)) || !!data[dependency])), checkable);
+        } catch (e) {
+            console.warn(`Dependency function error: ${e.toString()}`);
+        }
+    }
+
+    return checkable ? param : null;
+}
+
+/**
+ * Validate field
+ * @param {object} rules - object with rules for validation
+ * @param {object} methods - validation methods
+ * @param {string|FileList|Array} value - value of input
+ * @param {string} name - name on input
+ * @param {object} errorMessages - object with error messages
+ * @param {object} data - data of form
+ * @returns {Array.&lt;string&gt;} - array of field errors
+ */
+export function validateField(rules, methods, value, name, errorMessages, data) {
+    const isEmpty = !methods.required.func(value);
+
+    const isRequired = isCheckable(rules.required, data);
+
+    if (isEmpty &amp;&amp; isRequired) {
+        return [errorMessages[name].required];
+    }
+
+    if (isEmpty) {
+        return [];
+    }
+
+    return Object.keys(rules).reduce((errors, method) =&gt; {
+        const params = isCheckable(rules[method], data);
+
+        if (params === null) return errors;
+
+        if (methods[method]) {
+            const valid = methods[method].func(value, params);
+
+            if (!valid) {
+                errors.push(errorMessages[name][method]);
+            }
+        } else {
+            errors.push(`Method &quot;${method}&quot; not found`);
+        }
+
+        return errors;
+    }, []);
+}
+
+/**
+ * Validate data object
+ * @param {object} rules - object with rules for validation
+ * @param {object} methods - validation methods
+ * @param {object} data - data object
+ * @param {object} errorMessages - object with error messages
+ * @returns {object.&lt;string, Array.&lt;string&gt;&gt;} - object of fields error arrays
+ */
+export function validateData(rules, methods, data, errorMessages) {
+    return Object.keys(rules).reduce((obj, name) =&gt; {
+        const value = getValueByName(name, data);
+        const errors = validateField(rules[name], methods, value, name, errorMessages, data);
+        return {
+            ...obj,
+            [name]: errors.length ? errors : undefined,
+        };
+    }, {});
+}
 </code></pre>
 
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
 <script src="script/search_index.js"></script>

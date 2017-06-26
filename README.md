@@ -13,10 +13,12 @@
 * [Changelog](#changelog)
 
 ![logo](http://oi68.tinypic.com/t7o1n9.jpg)
+
 <h1>
     <a name="intro"></a>
     Introduction
 </h1>
+
 Jedi Validate is a lightweight form validation component.
 [Documentation](http://dmitriytat.github.io/jedi-validate/)
 
@@ -25,8 +27,14 @@ Jedi Validate is a lightweight form validation component.
 This is a JS class, and you can create a new instance by passing in a DOM element and an options object.
 
 ```javascript
-    new JediValidate(formWrapper, options);
+// npm install jedi-validate
+
+
+import JediValidate from 'jedi-validate';
+
+const JediValidate = new JediValidate(document.querySelector('#form5'));
 ```
+
 
 By default, the form will be sent via ajax with the parameters which were set in HTML.
 
@@ -44,6 +52,7 @@ But server answer always has one structure. It is easier to implement.
     <a name="install"></a>
     Build and Test
 </h2>
+
 If you would like to build the source code, run tests, or contribute, then first fork or clone this repo onto your local machine. Ensure NodeJS is installed and in turn npm. Check in a terminal with `node -v` and `npm -v`.
 
 To install project dependencies first run,
@@ -51,6 +60,7 @@ To install project dependencies first run,
 ```
 npm install
 ```
+
 ### Build
 To build the source and watch for changes in the terminal run,
 
@@ -59,7 +69,7 @@ npm run build
 ```
 
 ### Build and Serve
-To bundle the source and serve it to `localhost:8080` run,
+To bundle the source and serve it to `localhost:4000` run,
 
 ```
 npm run dev
@@ -300,3 +310,4 @@ You can define your own error messages in case validation fails. In case a form 
     - add jsdoc
 - 1.1.3 fix radio input data
 - 1.2.0 add support of dependencies for field (see example)
+- 1.2.1 fix field wrapper bug

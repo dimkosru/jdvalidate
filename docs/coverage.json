@@ -3,32 +3,32 @@
   "expectCount": 19,
   "actualCount": 19,
   "files": {
-    "src/i18n/jedi-validate-i18n.es6": {
+    "src/i18n/jedi-validate-i18n.js": {
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
     },
-    "src/lib/ajax.es6": {
+    "src/lib/ajax.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/lib/convert-data.es6": {
+    "src/lib/convert-data.js": {
       "expectCount": 3,
       "actualCount": 3,
       "undocumentLines": []
     },
-    "src/lib/get-data.es6": {
+    "src/lib/get-data.js": {
       "expectCount": 8,
       "actualCount": 8,
       "undocumentLines": []
     },
-    "src/lib/get-options.es6": {
+    "src/lib/get-options.js": {
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
     },
-    "src/lib/validate-data.es6": {
+    "src/lib/validate-data.js": {
       "expectCount": 3,
       "actualCount": 3,
       "undocumentLines": []

@@ -3,10 +3,10 @@ module.exports = function (config) {
         browsers: ['PhantomJS'],
         frameworks: ['mocha', 'chai'],
         files: [
-            './tests/**/*.es6',
+            './tests/**/*.js',
         ],
         preprocessors: {
-            './tests/**/*.es6': ['webpack'],
+            './tests/**/*.js': ['webpack'],
         },
         reporters: ['mocha'],
         mochaReporter: {
@@ -16,9 +16,9 @@ module.exports = function (config) {
             module: {
                 rules: [
                     {
-                        test: /\.es6/,
+                        test: /\.js/,
                         exclude: /(node_modules|bower_components)/,
-                        loader: 'babel-loader',
+                        loader: 'babel-loader?cacheDirectory=cache',
                     },
                     {
                         test: /\.json$/,

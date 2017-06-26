@@ -1,4 +1,4 @@
-import { createCheckableElement } from '../test-utils/utils.es6';
+import { createCheckableElement } from '../test-utils/utils.js';
 
 import {
     getData,
@@ -9,7 +9,7 @@ import {
     createObject,
     getInputData,
     getQueryPart,
-} from '../src/lib/get-data.es6';
+} from '../src/lib/get-data.js';
 
 const data = {
     phone: '92356234',
