@@ -125,7 +125,7 @@ export function getInputValue(input) {
 
     switch (type) {
     case &apos;select-one&apos;:
-        return input.options.length ? input.options[input.selectedIndex].value : &apos;&apos;;
+        return input.options &amp;&amp; input.options[input.selectedIndex] &amp;&amp; input.options[input.selectedIndex].value || &apos;&apos;;
     case &apos;select-multiple&apos;:
         return [...input.options].filter(option =&gt; option.selected).map(option =&gt; option.value);
     case &apos;checkbox&apos;:

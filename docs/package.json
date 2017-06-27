@@ -1,11 +1,12 @@
 {
   "name": "jedi-validate",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A lightweight form validation component",
   "main": "./dist/jedi-validate.js",
   "scripts": {
     "test": "karma start",
     "start": "rimraf ./dist && webpack-dev-server --hot --inline --progress --colors --watch --port 4000",
+    "prebuild": "npm run test -- --single-run",
     "build": "rimraf ./docs && npm run esdoc && rimraf ./dist && webpack --progress --colors",
     "lint": "eslint src/**/*.js",
     "fix": "eslint src/**/*.js --fix",
