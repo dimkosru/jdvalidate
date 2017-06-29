@@ -135,9 +135,9 @@ class JediValidate {
             },
             formStatePrefix: &apos;jedi-&apos;,
             callbacks: {
-                success() {
+                success({event, response}) {
                 },
-                error() {
+                error({errors}) {
                 },
             },
             clean: true,
@@ -209,7 +209,6 @@ class JediValidate {
         this.nodes.form.setAttribute(&apos;novalidate&apos;, &apos;novalidate&apos;);
 
         this.nodes.form.addEventListener(&apos;submit&apos;, (event) =&gt; {
-            event.preventDefault();
             this.data = getData(this.inputs);
 
             const errors = validateData(
@@ -230,7 +229,7 @@ class JediValidate {
                 );
 
                 try {
-                    this.options.callbacks.error(errors);
+                    this.options.callbacks.error({errors});
                 } catch (e) {
                     console.error(e);
                 }
@@ -243,7 +242,7 @@ class JediValidate {
                 event.preventDefault();
             } else {
                 try {
-                    this.options.callbacks.success(null);
+                    this.options.callbacks.success({event});
                 } catch (e) {
                     console.error(e);
                 }
@@ -364,7 +363,7 @@ class JediValidate {
         ajax(options).then((response) =&gt; {
             if (response.validationErrors) {
                 try {
-                    this.options.callbacks.error(response.validationErrors);
+                    this.options.callbacks.error({errors: response.validationErrors});
                 } catch (e) {
                     console.error(e);
                 }
@@ -388,7 +387,7 @@ class JediValidate {
                 );
             } else {
                 try {
-                    this.options.callbacks.success(response);
+                    this.options.callbacks.success({response});
                 } catch (e) {
                     console.error(e);
                 }

@@ -295,6 +295,7 @@ You can define your own error messages in case validation fails. In case a form 
   <a name="changelog"></a>
   Changelog
 </h1>
+
 - 1.0.6 fix bug with sending
 - 1.0.5 add enhanced language support
 - 1.0.4 add simple language support
@@ -311,3 +312,5 @@ You can define your own error messages in case validation fails. In case a form 
 - 1.1.3 fix radio input data
 - 1.2.0 add support of dependencies for field (see example)
 - 1.2.1 fix field wrapper bug
+- 1.2.2 fix bugs
+- 1.2.3 fix bugs

@@ -77,9 +77,9 @@ class JediValidate {
             },
             formStatePrefix: 'jedi-',
             callbacks: {
-                success() {
+                success({event, response}) {
                 },
-                error() {
+                error({errors}) {
                 },
             },
             clean: true,
@@ -151,7 +151,6 @@ class JediValidate {
         this.nodes.form.setAttribute('novalidate', 'novalidate');
 
         this.nodes.form.addEventListener('submit', (event) => {
-            event.preventDefault();
             this.data = getData(this.inputs);
 
             const errors = validateData(
@@ -172,7 +171,7 @@ class JediValidate {
                 );
 
                 try {
-                    this.options.callbacks.error(errors);
+                    this.options.callbacks.error({errors});
                 } catch (e) {
                     console.error(e);
                 }
@@ -185,7 +184,7 @@ class JediValidate {
                 event.preventDefault();
             } else {
                 try {
-                    this.options.callbacks.success(null);
+                    this.options.callbacks.success({event});
                 } catch (e) {
                     console.error(e);
                 }
@@ -306,7 +305,7 @@ class JediValidate {
         ajax(options).then((response) => {
             if (response.validationErrors) {
                 try {
-                    this.options.callbacks.error(response.validationErrors);
+                    this.options.callbacks.error({errors: response.validationErrors});
                 } catch (e) {
                     console.error(e);
                 }
@@ -330,7 +329,7 @@ class JediValidate {
                 );
             } else {
                 try {
-                    this.options.callbacks.success(response);
+                    this.options.callbacks.success({response});
                 } catch (e) {
                     console.error(e);
                 }

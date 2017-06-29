@@ -427,7 +427,7 @@ function convertData(data, type) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.translate = translate;
 exports.addTranslation = addTranslation;
@@ -446,9 +446,9 @@ var defaultLanguage = 'en';
  * @returns {string} - translated text
  */
 function translate(text) {
-  var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultLanguage;
+    var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultLanguage;
 
-  return dictionary[language] && dictionary[language][text] || text;
+    return dictionary[language] && dictionary[language][text] || text;
 }
 
 /**
@@ -458,13 +458,13 @@ function translate(text) {
  * @param {string} language - language token
  */
 function addTranslation(sourceText, translatedText) {
-  var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultLanguage;
+    var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultLanguage;
 
-  if (dictionary[language] === undefined) {
-    dictionary[language] = {};
-  }
+    if (dictionary[language] === undefined) {
+        dictionary[language] = {};
+    }
 
-  dictionary[language][sourceText] = translatedText;
+    dictionary[language][sourceText] = translatedText;
 }
 
 /***/ }),
@@ -569,8 +569,13 @@ var JediValidate = function () {
             },
             formStatePrefix: 'jedi-',
             callbacks: {
-                success: function success() {},
-                error: function error() {}
+                success: function success(_ref) {
+                    var event = _ref.event,
+                        response = _ref.response;
+                },
+                error: function error(_ref2) {
+                    var errors = _ref2.errors;
+                }
             },
             clean: true,
             redirect: true,
@@ -640,7 +645,6 @@ var JediValidate = function () {
             this.nodes.form.setAttribute('novalidate', 'novalidate');
 
             this.nodes.form.addEventListener('submit', function (event) {
-                event.preventDefault();
                 _this2.data = (0, _getData.getData)(_this2.inputs);
 
                 var errors = (0, _validateData.validateData)(_this2.rules, _this2.methods, _this2.data, _this2.errorMessages);
@@ -653,7 +657,7 @@ var JediValidate = function () {
                     });
 
                     try {
-                        _this2.options.callbacks.error(errors);
+                        _this2.options.callbacks.error({ errors: errors });
                     } catch (e) {
                         console.error(e);
                     }
@@ -666,7 +670,7 @@ var JediValidate = function () {
                     event.preventDefault();
                 } else {
                     try {
-                        _this2.options.callbacks.success(null);
+                        _this2.options.callbacks.success({ event: event });
                     } catch (e) {
                         console.error(e);
                     }
@@ -776,7 +780,7 @@ var JediValidate = function () {
             (0, _ajax.ajax)(options).then(function (response) {
                 if (response.validationErrors) {
                     try {
-                        _this3.options.callbacks.error(response.validationErrors);
+                        _this3.options.callbacks.error({ errors: response.validationErrors });
                     } catch (e) {
                         console.error(e);
                     }
@@ -795,7 +799,7 @@ var JediValidate = function () {
                     });
                 } else {
                     try {
-                        _this3.options.callbacks.success(response);
+                        _this3.options.callbacks.success({ response: response });
                     } catch (e) {
                         console.error(e);
                     }
@@ -809,11 +813,11 @@ var JediValidate = function () {
                         _this3.nodes.form.reset();
                     }
                 }
-            }).catch(function (_ref) {
-                var method = _ref.method,
-                    url = _ref.url,
-                    status = _ref.status,
-                    statusText = _ref.statusText;
+            }).catch(function (_ref3) {
+                var method = _ref3.method,
+                    url = _ref3.url,
+                    status = _ref3.status,
+                    statusText = _ref3.statusText;
 
                 console.warn(method + ' ' + url + ' ' + status + ' (' + statusText + ')');
 
@@ -922,9 +926,9 @@ var JediValidate = function () {
 
     }, {
         key: 'markError',
-        value: function markError(field, message, _ref2, errors) {
-            var error = _ref2.error,
-                valid = _ref2.valid;
+        value: function markError(field, message, _ref4, errors) {
+            var error = _ref4.error,
+                valid = _ref4.valid;
 
             if (!field || !message) {
                 return;
@@ -946,9 +950,9 @@ var JediValidate = function () {
 
     }, {
         key: 'markValid',
-        value: function markValid(field, message, _ref3) {
-            var error = _ref3.error,
-                valid = _ref3.valid;
+        value: function markValid(field, message, _ref5) {
+            var error = _ref5.error,
+                valid = _ref5.valid;
 
             if (!field || !message) {
                 return;
