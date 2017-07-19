@@ -112,7 +112,7 @@ export function convertData(data, type) {
     switch (type) {
     case &apos;serialize&apos;:
         convertedData = Object.keys(data)
-                .reduce((query, name) =&gt; `${query}${getQueryPart(name, data[name])}`, &apos;&apos;);
+            .reduce((query, name) =&gt; `${query}${getQueryPart(name, data[name])}`, &apos;&apos;);
         return convertedData.length ? convertedData.slice(0, -1) : &apos;&apos;;
     case &apos;formData&apos;:
         return Object.keys(data).reduce((formData, name) =&gt; {

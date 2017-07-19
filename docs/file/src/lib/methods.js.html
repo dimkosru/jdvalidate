@@ -85,11 +85,11 @@
         message: &apos;This extension is not supported&apos;,
     },
     tel: {
-        func: value =&gt; /^([\+]+)*[0-9\x20\x28\x29\-]{5,20}$/.test(value),
+        func: value =&gt; /^([+]+)*[0-9\x20\x28\x29-]{5,20}$/.test(value),
         message: &apos;This phone number is incorrect&apos;,
     },
     url: {
-        func: value =&gt; /[-a-zA-Z0-9@:%_\+.~#?&amp;//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&amp;//=]*)?/gi.test(value), // eslint-disable-line max-len
+        func: value =&gt; /[-a-zA-Z0-9@:%_+.~#?&amp;//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&amp;//=]*)?/gi.test(value), // eslint-disable-line max-len
         message: &apos;Wrong url&apos;,
     },
 };

@@ -27,11 +27,11 @@ export default {
         message: 'This extension is not supported',
     },
     tel: {
-        func: value => /^([\+]+)*[0-9\x20\x28\x29\-]{5,20}$/.test(value),
+        func: value => /^([+]+)*[0-9\x20\x28\x29-]{5,20}$/.test(value),
         message: 'This phone number is incorrect',
     },
     url: {
-        func: value => /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(value), // eslint-disable-line max-len
+        func: value => /[-a-zA-Z0-9@:%_+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&//=]*)?/gi.test(value), // eslint-disable-line max-len
         message: 'Wrong url',
     },
 };

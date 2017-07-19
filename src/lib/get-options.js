@@ -1,7 +1,7 @@
 /**
  * Get ajax options from form
  * @param {HTMLFormElement} form - form element
- * @returns {{ajax: {url: string, method: string, enctype: string, sendType: *}}} - object with options for sending
+ * @returns {{ajax: {url: string, method: string, enctype: string, sendType: *}}} - options
  */
 export function getFormOptions(form) {
     const enctype = form.getAttribute('enctype');

@@ -187,10 +187,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="phonedv1" class="col-sm-2 control-label">Phone:</label>
+                            <label for="phonedv2" class="col-sm-2 control-label">Phone:</label>
 
                             <div class="col-sm-10">
-                                <input name="phone" type="text" class="form-control" id="phonedv1" placeholder="Phone">
+                                <input name="phone" type="text" class="form-control" id="phonedv2" placeholder="Phone">
                             </div>
                         </div>
                         <hr/>
@@ -261,25 +261,35 @@
     new JediValidate(document.querySelector('#form4'), Object.assign({}, options));
 
     var validator = new JediValidate(document.querySelector('#form5'), Object.assign({}, {
+        states: {
+            error: 'has-error',
+            valid: 'has-success',
+            dirty: 'has-warning'
+        },
         rules: {
             phone: {
                 required: [true, function(oldData) {
-                    const newData = validator.collect('two-files-checkbox'); // manual data recollect for concrete field
-                    return !!newData['two-files-checkbox'];
+                    const newData = validator.collect('checkbox'); // manual data recollect for concrete field
+                    return !!newData['checkbox'];
                 }],
                 tel: [true, 'checkbox'], // without recollect
             }
         },
     }));
 
-    new JediValidate(document.querySelector('#form5'), Object.assign({}, {
+    new JediValidate(document.querySelector('#form6'), Object.assign({}, {
+        states: {
+            error: 'has-error',
+            valid: 'has-success',
+            dirty: 'has-warning'
+        },
         rules: {
             phone: {
                 tel: {
                     params: true,
-                    dependencies: [function(data) {
-                        validator.collect();
-                        return !!data['checkbox'];
+                    dependencies: [function(oldData) {
+                        const newData = validator.collect('checkbox'); // manual data recollect for concrete field
+                        return !!newData['checkbox'];
                     }],
                     level: 'input',
                 }

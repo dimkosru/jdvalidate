@@ -1,8 +1,13 @@
-import { translate } from '../i18n/jedi-validate-i18n.js';
+import { translate } from '../i18n/jedi-validate-i18n';
 
 /**
  * Sending request
- * @param {{url: string, enctype: string, sendType: string, method: string, data: string|FormData}} options - Sending options
+ * @param {Object} options - Sending options
+ * @param {string} options.url
+ * @param {string} options.enctype - Sending options
+ * @param {string} options.sendType - Sending options
+ * @param {string} options.method - Sending options
+ * @param {string|FormData} options.data - Sending options
  * @returns {Promise}
  * todo rewrite to fetch
  */
@@ -43,8 +48,7 @@ export function ajax(options) {
         };
 
         xhr.send(options.method.toUpperCase() === 'POST' ? options.data : '');
-    },
-    );
+    });
 }
 
 export default ajax;

@@ -136,12 +136,16 @@ function mergeObject(target, source, optionsArgument) {
 }
 
 function deepmerge(target, source, optionsArgument) {
-    var array = Array.isArray(source);
+    var sourceIsArray = Array.isArray(source);
+    var targetIsArray = Array.isArray(target);
     var options = optionsArgument || { arrayMerge: defaultArrayMerge };
-    var arrayMerge = options.arrayMerge || defaultArrayMerge;
+    var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
 
-    if (array) {
-        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    if (!sourceAndTargetTypesMatch) {
+        return cloneIfNecessary(source, optionsArgument)
+    } else if (sourceIsArray) {
+        var arrayMerge = options.arrayMerge || defaultArrayMerge;
+        return arrayMerge(target, source, optionsArgument)
     } else {
         return mergeObject(target, source, optionsArgument)
     }
@@ -242,14 +246,14 @@ function getValueByName(name, data) {
 function getRadioGroupValue(inputs) {
     var values = [].concat(_toConsumableArray(inputs)).map(function (radio) {
         return getInputValue(radio);
-    }).filter(Boolean);
+    }).filter(Boolean); // eslint-disable-line no-use-before-define, max-len
 
     return values.length > 1 ? values : values[0];
 }
 
 /**
  * Get value form input
- * @param {HTMLInputElement|HTMLSelectElement|Array} input - input element or array of HTMLInputElements
+ * @param {HTMLInputElement|HTMLSelectElement|Array} input - input
  * @returns {string|FileList|Array} - value of input, or array of value if input is select
  */
 function getInputValue(input) {
@@ -264,7 +268,7 @@ function getInputValue(input) {
 
     switch (type) {
         case 'select-one':
-            return input.options && input.options[input.selectedIndex] && input.options[input.selectedIndex].value || '';
+            return input.options && input.options[input.selectedIndex] ? input.options[input.selectedIndex].value : '';
         case 'select-multiple':
             return [].concat(_toConsumableArray(input.options)).filter(function (option) {
                 return option.selected;
@@ -427,7 +431,7 @@ function convertData(data, type) {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.translate = translate;
 exports.addTranslation = addTranslation;
@@ -446,9 +450,9 @@ var defaultLanguage = 'en';
  * @returns {string} - translated text
  */
 function translate(text) {
-    var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultLanguage;
+  var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultLanguage;
 
-    return dictionary[language] && dictionary[language][text] || text;
+  return dictionary[language] && dictionary[language][text] || text;
 }
 
 /**
@@ -458,13 +462,13 @@ function translate(text) {
  * @param {string} language - language token
  */
 function addTranslation(sourceText, translatedText) {
-    var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultLanguage;
+  var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultLanguage;
 
-    if (dictionary[language] === undefined) {
-        dictionary[language] = {};
-    }
+  if (dictionary[language] === undefined) {
+    dictionary[language] = {};
+  }
 
-    dictionary[language][sourceText] = translatedText;
+  dictionary[language][sourceText] = translatedText;
 }
 
 /***/ }),
@@ -1021,7 +1025,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /**
  * Get ajax options from form
  * @param {HTMLFormElement} form - form element
- * @returns {{ajax: {url: string, method: string, enctype: string, sendType: *}}} - object with options for sending
+ * @returns {{ajax: {url: string, method: string, enctype: string, sendType: *}}} - options
  */
 function getFormOptions(form) {
     var enctype = form.getAttribute('enctype');
@@ -1184,7 +1188,12 @@ var _jediValidateI18n = __webpack_require__(3);
 
 /**
  * Sending request
- * @param {{url: string, enctype: string, sendType: string, method: string, data: string|FormData}} options - Sending options
+ * @param {Object} options - Sending options
+ * @param {string} options.url
+ * @param {string} options.enctype - Sending options
+ * @param {string} options.sendType - Sending options
+ * @param {string} options.method - Sending options
+ * @param {string|FormData} options.data - Sending options
  * @returns {Promise}
  * todo rewrite to fetch
  */
@@ -1286,14 +1295,14 @@ exports.default = {
     },
     tel: {
         func: function func(value) {
-            return (/^([\+]+)*[0-9\x20\x28\x29\-]{5,20}$/.test(value)
+            return (/^([+]+)*[0-9\x20\x28\x29-]{5,20}$/.test(value)
             );
         },
         message: 'This phone number is incorrect'
     },
     url: {
         func: function func(value) {
-            return (/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(value)
+            return (/[-a-zA-Z0-9@:%_+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&//=]*)?/gi.test(value)
             );
         }, // eslint-disable-line max-len
         message: 'Wrong url'

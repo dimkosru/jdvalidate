@@ -58,7 +58,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/lib/get-data.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import deepmerge from &apos;deepmerge&apos;;
 
-import { convertNameToPath } from &apos;./convert-data.js&apos;;
+import { convertNameToPath } from &apos;./convert-data&apos;;
 
 /**
  * Create object by path and value
@@ -104,14 +104,14 @@ export function getValueByName(name, data) {
  * @returns {string|Array.&lt;string&gt;} - value of checked input
  */
 export function getRadioGroupValue(inputs) {
-    const values = [...inputs].map(radio =&gt; getInputValue(radio)).filter(Boolean);
+    const values = [...inputs].map(radio =&gt; getInputValue(radio)).filter(Boolean); // eslint-disable-line no-use-before-define, max-len
 
     return values.length &gt; 1 ? values : values[0];
 }
 
 /**
  * Get value form input
- * @param {HTMLInputElement|HTMLSelectElement|Array} input - input element or array of HTMLInputElements
+ * @param {HTMLInputElement|HTMLSelectElement|Array} input - input
  * @returns {string|FileList|Array} - value of input, or array of value if input is select
  */
 export function getInputValue(input) {
@@ -125,7 +125,7 @@ export function getInputValue(input) {
 
     switch (type) {
     case &apos;select-one&apos;:
-        return input.options &amp;&amp; input.options[input.selectedIndex] &amp;&amp; input.options[input.selectedIndex].value || &apos;&apos;;
+        return input.options &amp;&amp; input.options[input.selectedIndex] ? input.options[input.selectedIndex].value : &apos;&apos;;
     case &apos;select-multiple&apos;:
         return [...input.options].filter(option =&gt; option.selected).map(option =&gt; option.value);
     case &apos;checkbox&apos;:

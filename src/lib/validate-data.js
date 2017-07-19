@@ -1,4 +1,4 @@
-import { getValueByName } from './get-data.js';
+import { getValueByName } from './get-data';
 
 /**
  * Check rule for dependencies

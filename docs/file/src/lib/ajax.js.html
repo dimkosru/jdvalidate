@@ -56,11 +56,16 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/lib/ajax.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { translate } from &apos;../i18n/jedi-validate-i18n.js&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { translate } from &apos;../i18n/jedi-validate-i18n&apos;;
 
 /**
  * Sending request
- * @param {{url: string, enctype: string, sendType: string, method: string, data: string|FormData}} options - Sending options
+ * @param {Object} options - Sending options
+ * @param {string} options.url
+ * @param {string} options.enctype - Sending options
+ * @param {string} options.sendType - Sending options
+ * @param {string} options.method - Sending options
+ * @param {string|FormData} options.data - Sending options
  * @returns {Promise}
  * todo rewrite to fetch
  */
@@ -101,8 +106,7 @@ export function ajax(options) {
         };
 
         xhr.send(options.method.toUpperCase() === &apos;POST&apos; ? options.data : &apos;&apos;);
-    },
-    );
+    });
 }
 
 export default ajax;

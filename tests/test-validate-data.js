@@ -1,7 +1,5 @@
-import { createCheckableElement } from '../test-utils/utils.js';
-
-import { validateField, validateData } from '../src/lib/validate-data.js';
-import methods from '../src/lib/methods.js';
+import { validateField, validateData } from '../src/lib/validate-data';
+import methods from '../src/lib/methods';
 
 // todo move to test context
 const rules = {
@@ -45,49 +43,51 @@ const errorMessages = {
 describe('Validate data', () => {
     describe('Validate Field', () => {
         it('Pass correct value', () => {
-            assert.deepEqual(validateField(rules.phone, methods, data.phone, 'phone', errorMessages), []);
+            assert.deepEqual(validateField(rules.phone, methods, data.phone, 'phone', errorMessages, data), []);
         });
 
         it('Pass incorrect value', () => {
-            assert.deepEqual(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages), [errorMessages.phone2.regexp]);
+            assert.deepEqual(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data), [errorMessages.phone2.regexp]);
         });
     });
 
     describe('Validate data', () => {
         it('Validate values', () => {
+            // eslint-disable-next-line max-len
             assert.deepEqual(validateData(rules, methods, data, errorMessages), { phone: undefined, phone2: [errorMessages.phone2.regexp] });
         });
     });
 
     describe('Depends data', () => {
         it('Validate invalid values', () => {
-            const rules = {
+            const myRules = {
                 dependedInput: {
                     required: [true, 'checkbox'],
                 },
             };
 
-            const data = {
+            const myData = {
                 checkbox: 'true',
                 dependedInput: '',
             };
 
-            assert.deepEqual(validateData(rules, methods, data, errorMessages), { dependedInput: ['It is required'] });
+            assert.deepEqual(validateData(myRules, methods, myData, errorMessages), { dependedInput: ['It is required'] });
         });
 
         it('Validate valid values', () => {
-            const rules = {
+            const myRules = {
                 dependedInput: {
                     required: [true, 'checkbox'],
                 },
             };
 
-            const data = {
+            const myData = {
                 checkbox: '',
                 dependedInput: '',
             };
 
-            assert.deepEqual(validateData(rules, methods, data, errorMessages), { dependedInput: undefined });
+            // eslint-disable-next-line max-len
+            assert.deepEqual(validateData(myRules, methods, myData, errorMessages), { dependedInput: undefined });
         });
     });
 });

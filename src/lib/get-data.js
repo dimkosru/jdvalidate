@@ -1,6 +1,6 @@
 import deepmerge from 'deepmerge';
 
-import { convertNameToPath } from './convert-data.js';
+import { convertNameToPath } from './convert-data';
 
 /**
  * Create object by path and value
@@ -46,14 +46,14 @@ export function getValueByName(name, data) {
  * @returns {string|Array.<string>} - value of checked input
  */
 export function getRadioGroupValue(inputs) {
-    const values = [...inputs].map(radio => getInputValue(radio)).filter(Boolean);
+    const values = [...inputs].map(radio => getInputValue(radio)).filter(Boolean); // eslint-disable-line no-use-before-define, max-len
 
     return values.length > 1 ? values : values[0];
 }
 
 /**
  * Get value form input
- * @param {HTMLInputElement|HTMLSelectElement|Array} input - input element or array of HTMLInputElements
+ * @param {HTMLInputElement|HTMLSelectElement|Array} input - input
  * @returns {string|FileList|Array} - value of input, or array of value if input is select
  */
 export function getInputValue(input) {
@@ -67,7 +67,7 @@ export function getInputValue(input) {
 
     switch (type) {
     case 'select-one':
-        return input.options && input.options[input.selectedIndex] && input.options[input.selectedIndex].value || '';
+        return input.options && input.options[input.selectedIndex] ? input.options[input.selectedIndex].value : '';
     case 'select-multiple':
         return [...input.options].filter(option => option.selected).map(option => option.value);
     case 'checkbox':
