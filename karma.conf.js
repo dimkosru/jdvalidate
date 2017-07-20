@@ -1,6 +1,6 @@
 module.exports = function (config) {
     config.set({
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
         frameworks: ['mocha', 'chai'],
         files: [
             './tests/**/*.js',

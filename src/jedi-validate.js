@@ -38,11 +38,13 @@ class JediValidate {
      * @type {Object.<string, {func: Function, message: string}>}
      */
     methods = { ...defaultMethods };
+    /* eslint-disable */
     /**
      * Validator options
      * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: (function(object)), error: (function(object.<string, Array.<string>>))}, clean: boolean, redirect: boolean, language: string, translations: {}}}
      */
     options = {};
+    /* eslint-enable */
     /**
      * Validator rules
      * @type {object}
@@ -77,9 +79,9 @@ class JediValidate {
             },
             formStatePrefix: 'jedi-',
             callbacks: {
-                success({event, response}) {
+                success({ event, response }) { // eslint-disable-line no-unused-vars
                 },
-                error({errors}) {
+                error({ errors }) { // eslint-disable-line no-unused-vars
                 },
             },
             clean: true,
@@ -171,7 +173,7 @@ class JediValidate {
                 );
 
                 try {
-                    this.options.callbacks.error({errors});
+                    this.options.callbacks.error({ errors });
                 } catch (e) {
                     console.error(e);
                 }
@@ -184,7 +186,7 @@ class JediValidate {
                 event.preventDefault();
             } else {
                 try {
-                    this.options.callbacks.success({event});
+                    this.options.callbacks.success({ event });
                 } catch (e) {
                     console.error(e);
                 }
@@ -305,7 +307,7 @@ class JediValidate {
         ajax(options).then((response) => {
             if (response.validationErrors) {
                 try {
-                    this.options.callbacks.error({errors: response.validationErrors});
+                    this.options.callbacks.error({ errors: response.validationErrors });
                 } catch (e) {
                     console.error(e);
                 }
@@ -329,7 +331,7 @@ class JediValidate {
                 );
             } else {
                 try {
-                    this.options.callbacks.success({response});
+                    this.options.callbacks.success({ response });
                 } catch (e) {
                     console.error(e);
                 }
@@ -352,23 +354,41 @@ class JediValidate {
         });
     }
 
-
     /**
      * Collect data
-     * @param {string} name - field name
+     * @param {string|Array.<string>} params - field
+     * @returns {Object}
      */
-    collect(name = '') {
-        if (name) {
-            const inputData = getInputData(this.inputs[name]);
+    collect(params = '') {
+        if (params) {
+            if (Array.isArray(params)) {
+                return params.reduce((collected, name) => {
+                    const inputData = getInputData(this.inputs[name]);
+
+                    this.data = {
+                        ...this.data,
+                        ...inputData,
+                    };
+
+                    return {
+                        ...collected,
+                        ...inputData,
+                    };
+                }, {});
+            }
+
+            const inputData = getInputData(this.inputs[params]);
 
             // fixme don't work with 2 inputs phone[]
             this.data = {
                 ...this.data,
                 ...inputData,
             };
-        } else {
-            this.data = getData(this.inputs);
+
+            return inputData;
         }
+
+        this.data = getData(this.inputs);
 
         return this.data;
     }
@@ -389,7 +409,7 @@ class JediValidate {
     }
 
     /**
-     *
+     * Mark field as invalid
      * @param {Element} field
      * @param {Element} message
      * @param {string} error
@@ -408,7 +428,7 @@ class JediValidate {
     }
 
     /**
-     *
+     * Mark field as valid
      * @param {Element} field
      * @param {Element} message
      * @param {string} error

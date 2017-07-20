@@ -19,7 +19,7 @@ export function isCheckable(params, data) {
 
         try {
             checkable = dependencies
-                .reduce((required, dependency) => (required && ((typeof dependency === 'function' && dependency(data)) || !!data[dependency])), checkable);
+                .reduce((required, dependency) => (required && (typeof dependency === 'function' ? dependency(data) : !!data[dependency])), checkable);
         } catch (e) {
             console.warn(`Dependency function error: ${e.toString()}`);
         }
