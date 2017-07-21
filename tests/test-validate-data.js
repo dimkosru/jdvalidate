@@ -40,21 +40,25 @@ const errorMessages = {
     },
 };
 
+function translate(text) {
+    return text;
+}
+
 describe('Validate data', () => {
     describe('Validate Field', () => {
         it('Pass correct value', () => {
-            assert.deepEqual(validateField(rules.phone, methods, data.phone, 'phone', errorMessages, data), []);
+            assert.deepEqual(validateField(rules.phone, methods, data.phone, 'phone', errorMessages, data, translate), []);
         });
 
         it('Pass incorrect value', () => {
-            assert.deepEqual(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data), [errorMessages.phone2.regexp]);
+            assert.deepEqual(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data, translate), [errorMessages.phone2.regexp]);
         });
     });
 
     describe('Validate data', () => {
         it('Validate values', () => {
             // eslint-disable-next-line max-len
-            assert.deepEqual(validateData(rules, methods, data, errorMessages), { phone: undefined, phone2: [errorMessages.phone2.regexp] });
+            assert.deepEqual(validateData(rules, methods, data, errorMessages, translate), { phone: undefined, phone2: [errorMessages.phone2.regexp] });
         });
     });
 
@@ -71,7 +75,7 @@ describe('Validate data', () => {
                 dependedInput: '',
             };
 
-            assert.deepEqual(validateData(myRules, methods, myData, errorMessages), { dependedInput: ['It is required'] });
+            assert.deepEqual(validateData(myRules, methods, myData, errorMessages, translate), { dependedInput: ['It is required'] });
         });
 
         it('Validate valid values', () => {
@@ -87,7 +91,7 @@ describe('Validate data', () => {
             };
 
             // eslint-disable-next-line max-len
-            assert.deepEqual(validateData(myRules, methods, myData, errorMessages), { dependedInput: undefined });
+            assert.deepEqual(validateData(myRules, methods, myData, errorMessages, translate), { dependedInput: undefined });
         });
     });
 });

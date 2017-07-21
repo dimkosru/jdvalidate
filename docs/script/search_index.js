@@ -1,9 +1,9 @@
 window.esdocSearchIndex = [
   [
-    "jedi-validate/src/i18n/jedi-validate-i18n.js~addtranslation",
-    "function/index.html#static-function-addTranslation",
-    "<span>addTranslation</span> <span class=\"search-result-import-path\">jedi-validate/src/i18n/jedi-validate-i18n.js</span>",
-    "function"
+    "jedi-validate/src/i18n/jedi-validate-i18n.js~dictionary",
+    "class/src/i18n/jedi-validate-i18n.js~Dictionary.html",
+    "<span>Dictionary</span> <span class=\"search-result-import-path\">jedi-validate/src/i18n/jedi-validate-i18n.js</span>",
+    "class"
   ],
   [
     "jedi-validate/src/lib/ajax.js~ajax",
@@ -93,12 +93,6 @@ window.esdocSearchIndex = [
     "jedi-validate/src/lib/validate-data.js~ischeckable",
     "function/index.html#static-function-isCheckable",
     "<span>isCheckable</span> <span class=\"search-result-import-path\">jedi-validate/src/lib/validate-data.js</span>",
-    "function"
-  ],
-  [
-    "jedi-validate/src/i18n/jedi-validate-i18n.js~translate",
-    "function/index.html#static-function-translate",
-    "<span>translate</span> <span class=\"search-result-import-path\">jedi-validate/src/i18n/jedi-validate-i18n.js</span>",
     "function"
   ],
   [
@@ -448,6 +442,42 @@ window.esdocSearchIndex = [
     "file/src/i18n/jedi-validate-i18n.js.html",
     "src/i18n/jedi-validate-i18n.js",
     "file"
+  ],
+  [
+    "src/i18n/jedi-validate-i18n.js~dictionary#addtranslation",
+    "class/src/i18n/jedi-validate-i18n.js~Dictionary.html#instance-method-addTranslation",
+    "src/i18n/jedi-validate-i18n.js~Dictionary#addTranslation",
+    "method"
+  ],
+  [
+    "src/i18n/jedi-validate-i18n.js~dictionary#addtranslations",
+    "class/src/i18n/jedi-validate-i18n.js~Dictionary.html#instance-method-addTranslations",
+    "src/i18n/jedi-validate-i18n.js~Dictionary#addTranslations",
+    "method"
+  ],
+  [
+    "src/i18n/jedi-validate-i18n.js~dictionary#constructor",
+    "class/src/i18n/jedi-validate-i18n.js~Dictionary.html#instance-constructor-constructor",
+    "src/i18n/jedi-validate-i18n.js~Dictionary#constructor",
+    "method"
+  ],
+  [
+    "src/i18n/jedi-validate-i18n.js~dictionary#defaultlanguage",
+    "class/src/i18n/jedi-validate-i18n.js~Dictionary.html#instance-member-defaultLanguage",
+    "src/i18n/jedi-validate-i18n.js~Dictionary#defaultLanguage",
+    "member"
+  ],
+  [
+    "src/i18n/jedi-validate-i18n.js~dictionary#dictionary",
+    "class/src/i18n/jedi-validate-i18n.js~Dictionary.html#instance-member-dictionary",
+    "src/i18n/jedi-validate-i18n.js~Dictionary#dictionary",
+    "member"
+  ],
+  [
+    "src/i18n/jedi-validate-i18n.js~dictionary#translate",
+    "class/src/i18n/jedi-validate-i18n.js~Dictionary.html#instance-method-translate",
+    "src/i18n/jedi-validate-i18n.js~Dictionary#translate",
+    "method"
   ],
   [
     "src/jedi-validate.js",

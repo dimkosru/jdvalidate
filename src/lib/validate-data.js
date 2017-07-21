@@ -19,7 +19,7 @@ export function isCheckable(params, data) {
 
         try {
             checkable = dependencies
-                .reduce((required, dependency) => (required && ((typeof dependency === 'function' && dependency(data)) || !!data[dependency])), checkable);
+                .reduce((required, dependency) => (required && (typeof dependency === 'function' ? dependency(data) : !!data[dependency])), checkable);
         } catch (e) {
             console.warn(`Dependency function error: ${e.toString()}`);
         }
@@ -36,15 +36,16 @@ export function isCheckable(params, data) {
  * @param {string} name - name on input
  * @param {object} errorMessages - object with error messages
  * @param {object} data - data of form
+ * @param {function} translate - translate function
  * @returns {Array.<string>} - array of field errors
  */
-export function validateField(rules, methods, value, name, errorMessages, data) {
+export function validateField(rules, methods, value, name, errorMessages, data, translate) {
     const isEmpty = !methods.required.func(value);
 
     const isRequired = isCheckable(rules.required, data);
 
     if (isEmpty && isRequired) {
-        return [errorMessages[name].required];
+        return [translate(errorMessages[name].required)];
     }
 
     if (isEmpty) {
@@ -60,10 +61,10 @@ export function validateField(rules, methods, value, name, errorMessages, data) 
             const valid = methods[method].func(value, params);
 
             if (!valid) {
-                errors.push(errorMessages[name][method]);
+                errors.push(translate(errorMessages[name][method]));
             }
         } else {
-            errors.push(`Method "${method}" not found`);
+            errors.push(`Method "${method}" not found`); // todo translation
         }
 
         return errors;
@@ -76,12 +77,13 @@ export function validateField(rules, methods, value, name, errorMessages, data) 
  * @param {object} methods - validation methods
  * @param {object} data - data object
  * @param {object} errorMessages - object with error messages
+ * @param {function} translate - translate function
  * @returns {object.<string, Array.<string>>} - object of fields error arrays
  */
-export function validateData(rules, methods, data, errorMessages) {
+export function validateData(rules, methods, data, errorMessages, translate) {
     return Object.keys(rules).reduce((obj, name) => {
         const value = getValueByName(name, data);
-        const errors = validateField(rules[name], methods, value, name, errorMessages, data);
+        const errors = validateField(rules[name], methods, value, name, errorMessages, data, translate); // eslint-disable-line max-len
         return {
             ...obj,
             [name]: errors.length ? errors : undefined,
