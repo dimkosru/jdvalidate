@@ -1,4 +1,10 @@
-import { validateField, validateData } from '../src/lib/validate-data';
+import should from 'should';
+
+import {
+    validateField,
+    validateData,
+    isCheckable,
+} from '../src/lib/validate-data';
 import methods from '../src/lib/methods';
 
 // todo move to test context
@@ -58,7 +64,10 @@ describe('Validate data', () => {
     describe('Validate data', () => {
         it('Validate values', () => {
             // eslint-disable-next-line max-len
-            assert.deepEqual(validateData(rules, methods, data, errorMessages, translate), { phone: undefined, phone2: [errorMessages.phone2.regexp] });
+            assert.deepEqual(validateData(rules, methods, data, errorMessages, translate), {
+                phone: undefined,
+                phone2: [errorMessages.phone2.regexp],
+            });
         });
     });
 
@@ -92,6 +101,40 @@ describe('Validate data', () => {
 
             // eslint-disable-next-line max-len
             assert.deepEqual(validateData(myRules, methods, myData, errorMessages, translate), { dependedInput: undefined });
+        });
+    });
+
+    describe('is Checkable', () => {
+        it('Should return null without params or false', () => {
+            should(isCheckable()).equal(null);
+            should(isCheckable([], {})).equal(null);
+            should(isCheckable(false, {})).equal(null);
+            should(isCheckable([false, 'lol'], {})).equal(null);
+        });
+
+        it('Should return params if params is not array', () => {
+            should(isCheckable('hello', {})).equal('hello');
+            should(isCheckable(true, {})).equal(true);
+            should(isCheckable('hello', {})).not.equal(true);
+        });
+
+        it('Should return params if params is not array', () => {
+            should(isCheckable('hello', {})).equal('hello');
+            should(isCheckable(true, {})).equal(true);
+            should(isCheckable('hello', {})).not.equal(true);
+        });
+
+        it('Should not throw error if function incorrect', () => {
+            should(() => {
+                isCheckable([true, () => { throw new Error('error'); }], {});
+            }).not.throw();
+        });
+
+        it('Should right calculate', () => {
+            should(isCheckable([true, 'one'], { one: 'value' })).equal(true);
+            should(isCheckable([true, d => !!d.one], { one: 'value' })).equal(true);
+            should(isCheckable([true, d => !!d.one, d => !d.two], { one: 'value', two: '' })).equal(true);
+            should(isCheckable([true, d => !!d.one, d => !d.two], { one: 'value', two: 'value' })).equal(null);
         });
     });
 });
