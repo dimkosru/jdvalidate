@@ -3,20 +3,24 @@ module.exports = function (config) {
         browsers: ['Chrome'],
         frameworks: ['mocha', 'chai'],
         files: [
-            './tests/**/*.js',
+            'tests/**/*.js',
         ],
         preprocessors: {
-            './tests/**/*.js': ['webpack'],
+            'tests/**/*.js': ['webpack'],
         },
-        reporters: ['mocha'],
+        reporters: ['mocha', 'coverage'],
         mochaReporter: {
             showDiff: true,
+        },
+        coverageReporter: {
+            dir: 'coverage',
+            subdir: '.',
         },
         webpack: {
             module: {
                 rules: [
                     {
-                        test: /\.js/,
+                        test: /\.js$/,
                         exclude: /(node_modules|bower_components)/,
                         loader: 'babel-loader?cacheDirectory=cache',
                     },

@@ -2,7 +2,6 @@ import deepmerge from 'deepmerge';
 import { getData, getInputData, getValueByName } from './lib/get-data';
 import { convertData } from './lib/convert-data';
 import Dictionary from './i18n/jedi-validate-i18n';
-import Dictionary from './i18n/jedi-validate-i18n';
 import { getFormOptions, getInputRules } from './lib/get-options';
 import { validateData, validateField } from './lib/validate-data';
 import { ajax } from './lib/ajax';
