@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/jedi-validate.svg)](https://www.npmjs.com/package/jedi-validate)
 [![doc coverage](http://dmitriytat.github.io/jedi-validate/badge.svg)](http://dmitriytat.github.io/jedi-validate/)
 [![Build Status](https://travis-ci.org/dmitriytat/jedi-validate.svg?branch=master)](https://travis-ci.org/dmitriytat/jedi-validate)
+[![Coverage Status](https://coveralls.io/repos/github/dmitriytat/jedi-validate/badge.svg?branch=master)](https://coveralls.io/github/dmitriytat/jedi-validate?branch=master)
 
 * [Introduction & documentation](#intro)
 * [Installation and Usage](#install)
@@ -12,7 +13,6 @@
   * [Data Encoding Options](#encoding)
 * [Validation Rules](#rules)
 * [Error Message](#error)
-* [Changelog](#changelog)
 
 <h1>
     <a name="intro"></a>
@@ -22,6 +22,7 @@
 Jedi Validate is a lightweight form validation component.
 
 - [Documentation](http://dmitriytat.github.io/jedi-validate/)
+- [Test coverage](https://coveralls.io/github/dmitriytat/jedi-validate)
 
 ## How Can I Use It?
 
@@ -291,27 +292,3 @@ You can define your own error messages in case validation fails. In case a form 
         }
     },
 ```
-
-<h1>
-  <a name="changelog"></a>
-  Changelog
-</h1>
-
-- 1.0.6 fix bug with sending
-- 1.0.5 add enhanced language support
-- 1.0.4 add simple language support
-- 1.1.1 change internal structure
-    - get data from inputs
-    - store data
-    - validate data
-    - migrate to webpack 2
-- 1.1.2 fix 
-    - fix translate
-    - fix select value
-    - add examples
-    - add jsdoc
-- 1.1.3 fix radio input data
-- 1.2.0 add support of dependencies for field (see example)
-- 1.2.1 fix field wrapper bug
-- 1.2.2 fix bugs
-- 1.2.3 fix bugs

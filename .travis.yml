@@ -1,7 +1,33 @@
 language: node_js
 node_js:
-- "stable"
+  - stable
 addons:
   chrome: stable
 before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+script:
+  - npm run build
+  - npm run test
+deploy:
+  - provider: pages
+    target-branch: gh-pages
+    local_dir: docs
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    on:
+      branch: master
+  - provider: npm
+    email: $NPM_EMAIL
+    api_key: $NPM_KEY
+    on:
+      tags: true
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file: dist/*
+    skip_cleanup: true
+    on:
+      tags: true
+cache:
+  directories:
+    - node_modules

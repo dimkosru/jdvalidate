@@ -8,13 +8,13 @@ module.exports = function (config) {
         preprocessors: {
             'tests/**/*.js': ['webpack'],
         },
-        reporters: ['mocha', 'coverage'],
+        reporters: ['mocha', 'coverage', 'coveralls'],
         mochaReporter: {
             showDiff: true,
         },
         coverageReporter: {
+            type: 'lcov',
             dir: 'coverage',
-            subdir: '.',
         },
         webpack: {
             module: {

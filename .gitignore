@@ -3,3 +3,6 @@
 /.idea
 /npm-debug.*
 /cache
+/docs
+/coverage
+/dist
