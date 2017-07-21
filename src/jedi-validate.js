@@ -1,7 +1,8 @@
 import deepmerge from 'deepmerge';
 import { getData, getInputData, getValueByName } from './lib/get-data';
 import { convertData } from './lib/convert-data';
-import { addTranslation, translate } from './i18n/jedi-validate-i18n';
+import Dictionary from './i18n/jedi-validate-i18n';
+import Dictionary from './i18n/jedi-validate-i18n';
 import { getFormOptions, getInputRules } from './lib/get-options';
 import { validateData, validateField } from './lib/validate-data';
 import { ajax } from './lib/ajax';
@@ -50,6 +51,12 @@ class JediValidate {
      * @type {object}
      */
     rules = {};
+
+    /**
+     * Translation dictionary
+     * @type {Dictionary}
+     */
+    dictionary = null;
 
     /**
      * JediValidate
@@ -104,16 +111,7 @@ class JediValidate {
 
         this.rules = { ...this.options.rules };
 
-        // todo rewrite translations
-        Object.keys(this.options.translations).forEach((language) => {
-            Object.keys(this.options.translations[language]).forEach((translation) => {
-                addTranslation(
-                    translation,
-                    this.options.translations[language][translation],
-                    language,
-                );
-            });
-        });
+        this.dictionary = new Dictionary(this.options.translations);
 
         this.ready();
 
@@ -123,16 +121,6 @@ class JediValidate {
             this.methods,
             this.options.language,
         );
-    }
-
-    /**
-     * Add localisation to JediValidate
-     * @param {string} sourceText - text on english
-     * @param {string} translatedText - text on needed language
-     * @param {string} language - language
-     */
-    static addToDictionary(sourceText, translatedText, language) {
-        addTranslation(sourceText, translatedText, language);
     }
 
     /**
@@ -160,6 +148,7 @@ class JediValidate {
                 this.methods,
                 this.data,
                 this.errorMessages,
+                this.translate,
             );
 
             if (errors && Object.keys(errors).filter(name => errors[name]).length !== 0) {
@@ -277,6 +266,7 @@ class JediValidate {
                     name,
                     this.errorMessages,
                     this.data,
+                    this.translate,
                 );
 
                 JediValidate.markField(
@@ -293,6 +283,12 @@ class JediValidate {
             });
         });
     }
+
+    /**
+     * Translate
+     * @param {string} text - text to translate
+     */
+    translate = text => this.dictionary.translate(text, this.options.language);
 
     /**
      * Send form
@@ -348,7 +344,7 @@ class JediValidate {
         }).catch(({ method, url, status, statusText }) => {
             console.warn(`${method} ${url} ${status} (${statusText})`);
 
-            this.nodes.baseMessage.innerHTML = translate('Can not send form!', this.options.language);
+            this.nodes.baseMessage.innerHTML = this.translate('Can not send form!');
             this.root.classList.add(this.options.formStatePrefix + this.options.states.error); // eslint-disable-line max-len
             this.root.classList.remove(this.options.formStatePrefix + this.options.states.valid); // eslint-disable-line max-len
         });
@@ -456,6 +452,23 @@ class JediValidate {
             func,
             message,
         };
+
+        this.errorMessages = JediValidate.initErrorMessages(
+            this.rules,
+            this.options.messages,
+            this.methods,
+            this.options.language,
+        );
+    }
+
+    /**
+     * Add localisation to JediValidate
+     * @param {string} sourceText - text on english
+     * @param {string} translatedText - text on needed language
+     * @param {string} language - language
+     */
+    addToDictionary(sourceText, translatedText, language) {
+        this.dictionary.addTranslation(sourceText, translatedText, language);
     }
 
     /**
@@ -463,15 +476,14 @@ class JediValidate {
      * @param {object} rules
      * @param {object} messages
      * @param {object} methods
-     * @param {string} language
      * @returns {Object.<string, Object.<string, string>>}
      */
-    static initErrorMessages(rules, messages, methods, language) {
+    static initErrorMessages(rules, messages, methods) {
         return Object.keys(rules).reduce((names, name) => ({
             ...names,
             [name]: Object.keys(rules[name]).reduce((ruleNames, method) => ({
                 ...ruleNames,
-                [method]: translate((messages[name] && messages[name][method]) || (methods[method] && methods[method].message) || '', language),
+                [method]: (messages[name] && messages[name][method]) || (methods[method] && methods[method].message) || '',
             }), {}),
         }), {});
     }

@@ -1,31 +1,67 @@
-const dictionary = require('./jedi-validate-i18n-data.json');
+const defaultDictionary = require('./jedi-validate-i18n-data.json');
 
 /**
- * Default language
- * @type {string}
+ * Dictionary for translation
  */
-const defaultLanguage = 'en';
+export default class Dictionary {
+    /**
+     * Dictionary store
+     * @type {Object}
+     */
+    dictionary = {};
 
-/**
- * Translate phrase
- * @param {string} text - phrase to translate
- * @param {string} language - language token
- * @returns {string} - translated text
- */
-export function translate(text, language = defaultLanguage) {
-    return (dictionary[language] && dictionary[language][text]) || text;
-}
+    /**
+     * Default language
+     * @type {string}
+     */
+    defaultLanguage = 'en';
 
-/**
- * Add translation pair to dictionary
- * @param {string} sourceText - phrase
- * @param {string} translatedText - translated phrase
- * @param {string} language - language token
- */
-export function addTranslation(sourceText, translatedText, language = defaultLanguage) {
-    if (dictionary[language] === undefined) {
-        dictionary[language] = {};
+    /**
+     * Dictionary
+     * @param {Object} translations
+     */
+    constructor(translations) {
+        this.addTranslations(defaultDictionary);
+        this.addTranslations(translations);
     }
 
-    dictionary[language][sourceText] = translatedText;
+    /**
+     * Translate phrase
+     * @param {string} text - phrase to translate
+     * @param {string} language - language token
+     * @returns {string} - translated text
+     */
+    translate(text, language = this.defaultLanguage) {
+        return (this.dictionary[language] && this.dictionary[language][text]) || text;
+    }
+
+    /**
+     * Add translation pair to dictionary
+     * @param {string} sourceText - phrase
+     * @param {string} translatedText - translated phrase
+     * @param {string} language - language token
+     */
+    addTranslation(sourceText, translatedText, language = this.defaultLanguage) {
+        if (this.dictionary[language] === undefined) {
+            this.dictionary[language] = {};
+        }
+
+        this.dictionary[language][sourceText] = translatedText;
+    }
+
+    /**
+     * Add translations to dictionary
+     * @param {Object} translations
+     */
+    addTranslations(translations) {
+        Object.keys(translations).forEach((language) => {
+            Object.keys(translations[language]).forEach((translation) => {
+                this.addTranslation(
+                    translation,
+                    translations[language][translation],
+                    language,
+                );
+            });
+        });
+    }
 }

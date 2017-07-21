@@ -276,26 +276,6 @@
             }
         },
     }));
-
-    new JediValidate(document.querySelector('#form6'), Object.assign({}, {
-        states: {
-            error: 'has-error',
-            valid: 'has-success',
-            dirty: 'has-warning'
-        },
-        rules: {
-            phone: {
-                tel: {
-                    params: true,
-                    dependencies: [function(oldData) {
-                        const newData = validator.collect('checkbox'); // manual data recollect for concrete field
-                        return !!newData['checkbox'];
-                    }],
-                    level: 'input',
-                }
-            }
-        },
-    }));
 </script>
 </body>
 

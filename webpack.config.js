@@ -16,14 +16,14 @@ module.exports = {
     },
     module: {
         rules: [
-            // {
-            //     enforce: 'pre',
-            //     test: /\.es6$/,
-            //     exclude: /(node_modules|bower_components|tests)/,
-            //     loader: 'eslint-loader',
-            // },
             {
-                test: /\.js/,
+                enforce: 'pre',
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components|tests)/,
+                loader: 'eslint-loader',
+            },
+            {
+                test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader?cacheDirectory=cache',
             },
