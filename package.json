@@ -4,9 +4,8 @@
   "description": "A lightweight form validation component",
   "main": "./dist/jedi-validate.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test karma start",
+    "test": "cross-env NODE_ENV=test karma start --single-run",
     "start": "rimraf ./dist && webpack-dev-server --hot --inline --progress --colors --watch --port 4000",
-    "prebuild": "npm run test -- --single-run",
     "build": "rimraf ./docs && npm run esdoc && rimraf ./dist && webpack --progress --colors",
     "lint": "eslint src/**/*.js",
     "fix": "eslint src/**/*.js --fix",
@@ -55,7 +54,6 @@
     "karma-coverage": "^1.1.1",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.3",
-    "karma-phantomjs-launcher": "^1.0.4",
     "karma-webpack": "2.0.4",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
