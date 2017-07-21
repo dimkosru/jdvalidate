@@ -32,8 +32,7 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">i18n</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addTranslation">addTranslation</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-translate">translate</a></span></span></li>
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">i18n</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/i18n/jedi-validate-i18n.js~Dictionary.html">Dictionary</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">lib</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ajax">ajax</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-convertData">convertData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-convertNameToPath">convertNameToPath</a></span></span></li>
@@ -56,36 +55,72 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/i18n/jedi-validate-i18n.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const dictionary = require(&apos;./jedi-validate-i18n-data.json&apos;);
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const defaultDictionary = require(&apos;./jedi-validate-i18n-data.json&apos;);
 
 /**
- * Default language
- * @type {string}
+ * Dictionary for translation
  */
-const defaultLanguage = &apos;en&apos;;
+export default class Dictionary {
+    /**
+     * Dictionary store
+     * @type {Object}
+     */
+    dictionary = {};
 
-/**
- * Translate phrase
- * @param {string} text - phrase to translate
- * @param {string} language - language token
- * @returns {string} - translated text
- */
-export function translate(text, language = defaultLanguage) {
-    return (dictionary[language] &amp;&amp; dictionary[language][text]) || text;
-}
+    /**
+     * Default language
+     * @type {string}
+     */
+    defaultLanguage = &apos;en&apos;;
 
-/**
- * Add translation pair to dictionary
- * @param {string} sourceText - phrase
- * @param {string} translatedText - translated phrase
- * @param {string} language - language token
- */
-export function addTranslation(sourceText, translatedText, language = defaultLanguage) {
-    if (dictionary[language] === undefined) {
-        dictionary[language] = {};
+    /**
+     * Dictionary
+     * @param {Object} translations
+     */
+    constructor(translations) {
+        this.addTranslations(defaultDictionary);
+        this.addTranslations(translations);
     }
 
-    dictionary[language][sourceText] = translatedText;
+    /**
+     * Translate phrase
+     * @param {string} text - phrase to translate
+     * @param {string} language - language token
+     * @returns {string} - translated text
+     */
+    translate(text, language = this.defaultLanguage) {
+        return (this.dictionary[language] &amp;&amp; this.dictionary[language][text]) || text;
+    }
+
+    /**
+     * Add translation pair to dictionary
+     * @param {string} sourceText - phrase
+     * @param {string} translatedText - translated phrase
+     * @param {string} language - language token
+     */
+    addTranslation(sourceText, translatedText, language = this.defaultLanguage) {
+        if (this.dictionary[language] === undefined) {
+            this.dictionary[language] = {};
+        }
+
+        this.dictionary[language][sourceText] = translatedText;
+    }
+
+    /**
+     * Add translations to dictionary
+     * @param {Object} translations
+     */
+    addTranslations(translations) {
+        Object.keys(translations).forEach((language) =&gt; {
+            Object.keys(translations[language]).forEach((translation) =&gt; {
+                this.addTranslation(
+                    translation,
+                    translations[language][translation],
+                    language,
+                );
+            });
+        });
+    }
 }
 </code></pre>
 

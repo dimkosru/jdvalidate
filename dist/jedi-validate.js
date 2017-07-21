@@ -431,45 +431,103 @@ function convertData(data, type) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.translate = translate;
-exports.addTranslation = addTranslation;
-var dictionary = __webpack_require__(5);
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var defaultDictionary = __webpack_require__(5);
 
 /**
- * Default language
- * @type {string}
+ * Dictionary for translation
  */
-var defaultLanguage = 'en';
 
-/**
- * Translate phrase
- * @param {string} text - phrase to translate
- * @param {string} language - language token
- * @returns {string} - translated text
- */
-function translate(text) {
-  var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultLanguage;
+var Dictionary = function () {
 
-  return dictionary[language] && dictionary[language][text] || text;
-}
+    /**
+     * Dictionary
+     * @param {Object} translations
+     */
 
-/**
- * Add translation pair to dictionary
- * @param {string} sourceText - phrase
- * @param {string} translatedText - translated phrase
- * @param {string} language - language token
- */
-function addTranslation(sourceText, translatedText) {
-  var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultLanguage;
+    /**
+     * Dictionary store
+     * @type {Object}
+     */
+    function Dictionary(translations) {
+        _classCallCheck(this, Dictionary);
 
-  if (dictionary[language] === undefined) {
-    dictionary[language] = {};
-  }
+        this.dictionary = {};
+        this.defaultLanguage = 'en';
 
-  dictionary[language][sourceText] = translatedText;
-}
+        this.addTranslations(defaultDictionary);
+        this.addTranslations(translations);
+    }
+
+    /**
+     * Translate phrase
+     * @param {string} text - phrase to translate
+     * @param {string} language - language token
+     * @returns {string} - translated text
+     */
+
+
+    /**
+     * Default language
+     * @type {string}
+     */
+
+
+    _createClass(Dictionary, [{
+        key: 'translate',
+        value: function translate(text) {
+            var language = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.defaultLanguage;
+
+            return this.dictionary[language] && this.dictionary[language][text] || text;
+        }
+
+        /**
+         * Add translation pair to dictionary
+         * @param {string} sourceText - phrase
+         * @param {string} translatedText - translated phrase
+         * @param {string} language - language token
+         */
+
+    }, {
+        key: 'addTranslation',
+        value: function addTranslation(sourceText, translatedText) {
+            var language = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.defaultLanguage;
+
+            if (this.dictionary[language] === undefined) {
+                this.dictionary[language] = {};
+            }
+
+            this.dictionary[language][sourceText] = translatedText;
+        }
+
+        /**
+         * Add translations to dictionary
+         * @param {Object} translations
+         */
+
+    }, {
+        key: 'addTranslations',
+        value: function addTranslations(translations) {
+            var _this = this;
+
+            Object.keys(translations).forEach(function (language) {
+                Object.keys(translations[language]).forEach(function (translation) {
+                    _this.addTranslation(translation, translations[language][translation], language);
+                });
+            });
+        }
+    }]);
+
+    return Dictionary;
+}();
+
+exports.default = Dictionary;
 
 /***/ }),
 /* 4 */
@@ -491,6 +549,8 @@ var _getData = __webpack_require__(1);
 var _convertData = __webpack_require__(2);
 
 var _jediValidateI18n = __webpack_require__(3);
+
+var _jediValidateI18n2 = _interopRequireDefault(_jediValidateI18n);
 
 var _getOptions = __webpack_require__(6);
 
@@ -516,24 +576,25 @@ var JediValidate = function () {
      * @param {object} options - object with options
      */
 
+    /* eslint-enable */
     /**
-     * Validator options
-     * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: (function(object)), error: (function(object.<string, Array.<string>>))}, clean: boolean, redirect: boolean, language: string, translations: {}}}
+     * Validator rules
+     * @type {object}
+     */
+
+    /**
+     * Validate methods
+     * @type {Object.<string, {func: Function, message: string}>}
      */
 
     /**
      * Object with error message
-     * @type {object} - data object
+     * @type {Object.<string, Object.<string, string>>}
      */
 
     /**
-     * Object with message nodes
-     * @type {Object.<string, Element>}
-     */
-
-    /**
-     * Object with fields
-     * @type {Object.<string, Element>}
+     * Object with inputs nodes
+     * @type {Object.<string, HTMLInputElement|HTMLSelectElement|Array>}
      */
     function JediValidate(root) {
         var _this = this;
@@ -550,6 +611,11 @@ var JediValidate = function () {
         this.methods = _extends({}, _methods2.default);
         this.options = {};
         this.rules = {};
+        this.dictionary = null;
+
+        this.translate = function (text) {
+            return _this.dictionary.translate(text, _this.options.language);
+        };
 
         var defaultOptions = {
             ajax: {
@@ -573,11 +639,13 @@ var JediValidate = function () {
             },
             formStatePrefix: 'jedi-',
             callbacks: {
-                success: function success(_ref) {
+                success: function success(_ref) {// eslint-disable-line no-unused-vars
+
                     var event = _ref.event,
                         response = _ref.response;
                 },
-                error: function error(_ref2) {
+                error: function error(_ref2) {// eslint-disable-line no-unused-vars
+
                     var errors = _ref2.errors;
                 }
             },
@@ -601,12 +669,7 @@ var JediValidate = function () {
 
         this.rules = _extends({}, this.options.rules);
 
-        // todo rewrite translations
-        Object.keys(this.options.translations).forEach(function (language) {
-            Object.keys(_this.options.translations[language]).forEach(function (translation) {
-                (0, _jediValidateI18n.addTranslation)(translation, _this.options.translations[language][translation], language);
-            });
-        });
+        this.dictionary = new _jediValidateI18n2.default(this.options.translations);
 
         this.ready();
 
@@ -614,30 +677,37 @@ var JediValidate = function () {
     }
 
     /**
-     * Add localisation to JediValidate
-     * @param {string} sourceText - text on english
-     * @param {string} translatedText - text on needed language
-     * @param {string} language - language
+     * Return object with working elements
+     * @param root Root element for search
+     * @param options Object with selectors
+     * @returns {{form: HTMLFormElement, inputs: NodeList, baseMessage: Element}}
      */
 
-    /**
-     * Validator rules
-     * @type {object}
-     */
 
     /**
-     * Validate methods
-     * @type {Object.<string, {func: Function, message: string}>}
+     * Translation dictionary
+     * @type {Dictionary}
+     */
+
+    /* eslint-disable */
+    /**
+     * Validator options
+     * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: (function(object)), error: (function(object.<string, Array.<string>>))}, clean: boolean, redirect: boolean, language: string, translations: {}}}
      */
 
     /**
      * Object with error message
-     * @type {Object.<string, Object.<string, string>>}
+     * @type {object} - data object
      */
 
     /**
-     * Object with inputs nodes
-     * @type {Object.<string, HTMLInputElement|HTMLSelectElement|Array>}
+     * Object with message nodes
+     * @type {Object.<string, Element>}
+     */
+
+    /**
+     * Object with fields
+     * @type {Object.<string, Element>}
      */
 
 
@@ -651,7 +721,7 @@ var JediValidate = function () {
             this.nodes.form.addEventListener('submit', function (event) {
                 _this2.data = (0, _getData.getData)(_this2.inputs);
 
-                var errors = (0, _validateData.validateData)(_this2.rules, _this2.methods, _this2.data, _this2.errorMessages);
+                var errors = (0, _validateData.validateData)(_this2.rules, _this2.methods, _this2.data, _this2.errorMessages, _this2.translate);
 
                 if (errors && Object.keys(errors).filter(function (name) {
                     return errors[name];
@@ -754,7 +824,7 @@ var JediValidate = function () {
                     // fixme don't work with 2 inputs phone[]
                     _this2.data = _extends({}, _this2.data, inputData);
 
-                    var errors = (0, _validateData.validateField)(_this2.rules[name], _this2.methods, value, name, _this2.errorMessages, _this2.data);
+                    var errors = (0, _validateData.validateField)(_this2.rules[name], _this2.methods, value, name, _this2.errorMessages, _this2.data, _this2.translate);
 
                     JediValidate.markField(_this2.fields[name], _this2.messages[name], _this2.options.states, errors);
                 });
@@ -767,6 +837,15 @@ var JediValidate = function () {
         }
 
         /**
+         * Translate
+         * @param {string} text - text to translate
+         */
+
+    }, {
+        key: 'send',
+
+
+        /**
          * Send form
          * @param {object} options - object with options for sending
          * @param {string} options.url
@@ -775,9 +854,6 @@ var JediValidate = function () {
          * @param {string} options.method
          * @param {string|FormData} options.data
          */
-
-    }, {
-        key: 'send',
         value: function send(options) {
             var _this3 = this;
 
@@ -825,7 +901,7 @@ var JediValidate = function () {
 
                 console.warn(method + ' ' + url + ' ' + status + ' (' + statusText + ')');
 
-                _this3.nodes.baseMessage.innerHTML = (0, _jediValidateI18n.translate)('Can not send form!', _this3.options.language);
+                _this3.nodes.baseMessage.innerHTML = _this3.translate('Can not send form!');
                 _this3.root.classList.add(_this3.options.formStatePrefix + _this3.options.states.error); // eslint-disable-line max-len
                 _this3.root.classList.remove(_this3.options.formStatePrefix + _this3.options.states.valid); // eslint-disable-line max-len
             });
@@ -833,22 +909,37 @@ var JediValidate = function () {
 
         /**
          * Collect data
-         * @param {string} name - field name
+         * @param {string|Array.<string>} params - field
+         * @returns {Object}
          */
 
     }, {
         key: 'collect',
         value: function collect() {
-            var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+            var _this4 = this;
 
-            if (name) {
-                var inputData = (0, _getData.getInputData)(this.inputs[name]);
+            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+            if (params) {
+                if (Array.isArray(params)) {
+                    return params.reduce(function (collected, name) {
+                        var inputData = (0, _getData.getInputData)(_this4.inputs[name]);
+
+                        _this4.data = _extends({}, _this4.data, inputData);
+
+                        return _extends({}, collected, inputData);
+                    }, {});
+                }
+
+                var inputData = (0, _getData.getInputData)(this.inputs[params]);
 
                 // fixme don't work with 2 inputs phone[]
                 this.data = _extends({}, this.data, inputData);
-            } else {
-                this.data = (0, _getData.getData)(this.inputs);
+
+                return inputData;
             }
+
+            this.data = (0, _getData.getData)(this.inputs);
 
             return this.data;
         }
@@ -876,6 +967,21 @@ var JediValidate = function () {
                 func: func,
                 message: message
             };
+
+            this.errorMessages = JediValidate.initErrorMessages(this.rules, this.options.messages, this.methods, this.options.language);
+        }
+
+        /**
+         * Add localisation to JediValidate
+         * @param {string} sourceText - text on english
+         * @param {string} translatedText - text on needed language
+         * @param {string} language - language
+         */
+
+    }, {
+        key: 'addToDictionary',
+        value: function addToDictionary(sourceText, translatedText, language) {
+            this.dictionary.addTranslation(sourceText, translatedText, language);
         }
 
         /**
@@ -883,24 +989,10 @@ var JediValidate = function () {
          * @param {object} rules
          * @param {object} messages
          * @param {object} methods
-         * @param {string} language
          * @returns {Object.<string, Object.<string, string>>}
          */
 
     }], [{
-        key: 'addToDictionary',
-        value: function addToDictionary(sourceText, translatedText, language) {
-            (0, _jediValidateI18n.addTranslation)(sourceText, translatedText, language);
-        }
-
-        /**
-         * Return object with working elements
-         * @param root Root element for search
-         * @param options Object with selectors
-         * @returns {{form: HTMLFormElement, inputs: NodeList, baseMessage: Element}}
-         */
-
-    }, {
         key: 'cacheNodes',
         value: function cacheNodes(root, options) {
             return {
@@ -920,7 +1012,7 @@ var JediValidate = function () {
         }
 
         /**
-         *
+         * Mark field as invalid
          * @param {Element} field
          * @param {Element} message
          * @param {string} error
@@ -945,7 +1037,7 @@ var JediValidate = function () {
         }
 
         /**
-         *
+         * Mark field as valid
          * @param {Element} field
          * @param {Element} message
          * @param {string} error
@@ -969,10 +1061,10 @@ var JediValidate = function () {
         }
     }, {
         key: 'initErrorMessages',
-        value: function initErrorMessages(rules, messages, methods, language) {
+        value: function initErrorMessages(rules, messages, methods) {
             return Object.keys(rules).reduce(function (names, name) {
                 return _extends({}, names, _defineProperty({}, name, Object.keys(rules[name]).reduce(function (ruleNames, method) {
-                    return _extends({}, ruleNames, _defineProperty({}, method, (0, _jediValidateI18n.translate)(messages[name] && messages[name][method] || methods[method] && methods[method].message || '', language)));
+                    return _extends({}, ruleNames, _defineProperty({}, method, messages[name] && messages[name][method] || methods[method] && methods[method].message || ''));
                 }, {})));
             }, {});
         }
@@ -985,10 +1077,7 @@ module.exports = JediValidate;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 module.exports = {
 	"ru": {
@@ -1104,7 +1193,7 @@ function isCheckable(params, data) {
 
         try {
             checkable = dependencies.reduce(function (required, dependency) {
-                return required && (typeof dependency === 'function' && dependency(data) || !!data[dependency]);
+                return required && (typeof dependency === 'function' ? dependency(data) : !!data[dependency]);
             }, checkable);
         } catch (e) {
             console.warn('Dependency function error: ' + e.toString());
@@ -1122,15 +1211,16 @@ function isCheckable(params, data) {
  * @param {string} name - name on input
  * @param {object} errorMessages - object with error messages
  * @param {object} data - data of form
+ * @param {function} translate - translate function
  * @returns {Array.<string>} - array of field errors
  */
-function validateField(rules, methods, value, name, errorMessages, data) {
+function validateField(rules, methods, value, name, errorMessages, data, translate) {
     var isEmpty = !methods.required.func(value);
 
     var isRequired = isCheckable(rules.required, data);
 
     if (isEmpty && isRequired) {
-        return [errorMessages[name].required];
+        return [translate(errorMessages[name].required)];
     }
 
     if (isEmpty) {
@@ -1146,10 +1236,10 @@ function validateField(rules, methods, value, name, errorMessages, data) {
             var valid = methods[method].func(value, params);
 
             if (!valid) {
-                errors.push(errorMessages[name][method]);
+                errors.push(translate(errorMessages[name][method]));
             }
         } else {
-            errors.push('Method "' + method + '" not found');
+            errors.push('Method "' + method + '" not found'); // todo translation
         }
 
         return errors;
@@ -1162,12 +1252,13 @@ function validateField(rules, methods, value, name, errorMessages, data) {
  * @param {object} methods - validation methods
  * @param {object} data - data object
  * @param {object} errorMessages - object with error messages
+ * @param {function} translate - translate function
  * @returns {object.<string, Array.<string>>} - object of fields error arrays
  */
-function validateData(rules, methods, data, errorMessages) {
+function validateData(rules, methods, data, errorMessages, translate) {
     return Object.keys(rules).reduce(function (obj, name) {
         var value = (0, _getData.getValueByName)(name, data);
-        var errors = validateField(rules[name], methods, value, name, errorMessages, data);
+        var errors = validateField(rules[name], methods, value, name, errorMessages, data, translate); // eslint-disable-line max-len
         return _extends({}, obj, _defineProperty({}, name, errors.length ? errors : undefined));
     }, {});
 }

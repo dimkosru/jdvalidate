@@ -32,8 +32,7 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">i18n</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addTranslation">addTranslation</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-translate">translate</a></span></span></li>
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">i18n</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/i18n/jedi-validate-i18n.js~Dictionary.html">Dictionary</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">lib</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ajax">ajax</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-convertData">convertData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-convertNameToPath">convertNameToPath</a></span></span></li>
@@ -77,7 +76,7 @@ export function isCheckable(params, data) {
 
         try {
             checkable = dependencies
-                .reduce((required, dependency) =&gt; (required &amp;&amp; ((typeof dependency === &apos;function&apos; &amp;&amp; dependency(data)) || !!data[dependency])), checkable);
+                .reduce((required, dependency) =&gt; (required &amp;&amp; (typeof dependency === &apos;function&apos; ? dependency(data) : !!data[dependency])), checkable);
         } catch (e) {
             console.warn(`Dependency function error: ${e.toString()}`);
         }
@@ -94,15 +93,16 @@ export function isCheckable(params, data) {
  * @param {string} name - name on input
  * @param {object} errorMessages - object with error messages
  * @param {object} data - data of form
+ * @param {function} translate - translate function
  * @returns {Array.&lt;string&gt;} - array of field errors
  */
-export function validateField(rules, methods, value, name, errorMessages, data) {
+export function validateField(rules, methods, value, name, errorMessages, data, translate) {
     const isEmpty = !methods.required.func(value);
 
     const isRequired = isCheckable(rules.required, data);
 
     if (isEmpty &amp;&amp; isRequired) {
-        return [errorMessages[name].required];
+        return [translate(errorMessages[name].required)];
     }
 
     if (isEmpty) {
@@ -118,10 +118,10 @@ export function validateField(rules, methods, value, name, errorMessages, data) 
             const valid = methods[method].func(value, params);
 
             if (!valid) {
-                errors.push(errorMessages[name][method]);
+                errors.push(translate(errorMessages[name][method]));
             }
         } else {
-            errors.push(`Method &quot;${method}&quot; not found`);
+            errors.push(`Method &quot;${method}&quot; not found`); // todo translation
         }
 
         return errors;
@@ -134,12 +134,13 @@ export function validateField(rules, methods, value, name, errorMessages, data) 
  * @param {object} methods - validation methods
  * @param {object} data - data object
  * @param {object} errorMessages - object with error messages
+ * @param {function} translate - translate function
  * @returns {object.&lt;string, Array.&lt;string&gt;&gt;} - object of fields error arrays
  */
-export function validateData(rules, methods, data, errorMessages) {
+export function validateData(rules, methods, data, errorMessages, translate) {
     return Object.keys(rules).reduce((obj, name) =&gt; {
         const value = getValueByName(name, data);
-        const errors = validateField(rules[name], methods, value, name, errorMessages, data);
+        const errors = validateField(rules[name], methods, value, name, errorMessages, data, translate); // eslint-disable-line max-len
         return {
             ...obj,
             [name]: errors.length ? errors : undefined,

@@ -1,6 +1,8 @@
 # Jedi Validate
 
-[![NPM](https://nodei.co/npm/jedi-validate.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/jedi-validate/)
+[![npm version](https://badge.fury.io/js/jedi-validate.svg)](https://www.npmjs.com/package/jedi-validate)
+[![doc coverage](http://dmitriytat.github.io/jedi-validate/badge.svg)](http://dmitriytat.github.io/jedi-validate/)
+[![Build Status](https://travis-ci.org/dmitriytat/jedi-validate.svg?branch=master)](https://travis-ci.org/dmitriytat/jedi-validate)
 
 * [Introduction & documentation](#intro)
 * [Installation and Usage](#install)
@@ -12,15 +14,14 @@
 * [Error Message](#error)
 * [Changelog](#changelog)
 
-![logo](http://oi68.tinypic.com/t7o1n9.jpg)
-
 <h1>
     <a name="intro"></a>
     Introduction
 </h1>
 
 Jedi Validate is a lightweight form validation component.
-[Documentation](http://dmitriytat.github.io/jedi-validate/)
+
+- [Documentation](http://dmitriytat.github.io/jedi-validate/)
 
 ## How Can I Use It?
 
