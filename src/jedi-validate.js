@@ -299,7 +299,7 @@ class JediValidate {
      * @param {string|FormData} options.data
      */
     send(options) {
-        ajax(options).then((response) => {
+        ajax(options, this.translate).then((response) => {
             if (response.validationErrors) {
                 try {
                     this.options.callbacks.error({ errors: response.validationErrors });

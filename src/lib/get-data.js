@@ -11,7 +11,7 @@ import { convertNameToPath } from './convert-data';
 export function createObject(path, value) {
     const segment = path[0];
 
-    if (segment.length === 0) {
+    if (!segment || segment.length === 0) {
         return value;
     } else if (segment === '[]') {
         return [createObject(path.slice(1), value)];
@@ -53,7 +53,7 @@ export function getRadioGroupValue(inputs) {
 
 /**
  * Get value form input
- * @param {HTMLInputElement|HTMLSelectElement|Array} input - input
+ * @param {Element|HTMLInputElement|HTMLSelectElement|Array} input - input
  * @returns {string|FileList|Array} - value of input, or array of value if input is select
  */
 export function getInputValue(input) {
