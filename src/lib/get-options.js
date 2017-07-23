@@ -24,13 +24,25 @@ export function getFormOptions(form) {
 export function getInputRules(input) {
     const defaultRules = ['required', 'email', 'tel', 'url'];
 
-    const rules = defaultRules.reduce((inputRules, rule) => ({
-        ...inputRules,
-        [rule]: input.hasAttribute(rule) || input.type === rule || input.classList.contains(rule),
-    }), {});
+    const rules = defaultRules.reduce((inputRules, rule) => {
+        const newRules = {};
+        const newRule = input.hasAttribute(rule) || input.type === rule || input.classList.contains(rule); // eslint-disable-line max-len
 
-    return {
-        ...rules,
-        regexp: input.hasAttribute('pattern') ? new RegExp(input.getAttribute('pattern')) : undefined,
-    };
+        if (newRule) {
+            newRules[rule] = newRule;
+        }
+
+        return {
+            ...inputRules,
+            ...newRules,
+        };
+    }, {});
+
+    const regexp = input.hasAttribute('pattern') ? new RegExp(input.getAttribute('pattern')) : undefined;
+
+    if (regexp) {
+        rules.regexp = regexp;
+    }
+
+    return rules;
 }

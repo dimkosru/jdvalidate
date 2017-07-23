@@ -1,5 +1,3 @@
-import { translate } from '../i18n/jedi-validate-i18n';
-
 /**
  * Sending request
  * @param {Object} options - Sending options
@@ -8,10 +6,11 @@ import { translate } from '../i18n/jedi-validate-i18n';
  * @param {string} options.sendType - Sending options
  * @param {string} options.method - Sending options
  * @param {string|FormData} options.data - Sending options
+ * @param {function} translate
  * @returns {Promise}
  * todo rewrite to fetch
  */
-export function ajax(options) {
+export function ajax(options, translate) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
 
@@ -31,7 +30,7 @@ export function ajax(options) {
                     try {
                         response = JSON.parse(xhr.responseText);
                     } catch (e) {
-                        response.validationErrors = { base: [translate('JSON parsing error')] }; // todo rewrite translate now dont work
+                        response.validationErrors = { base: [translate('JSON parsing error')] };
                     }
 
                     resolve(response);

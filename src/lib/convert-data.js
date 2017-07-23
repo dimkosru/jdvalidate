@@ -6,7 +6,7 @@
  */
 export function getQueryPart(name, data) {
     if (Array.isArray(data)) {
-        return data.reduce((part, index) => part + getQueryPart(`${name}[${index}]`, data[index]), '');
+        return data.reduce((part, value) => part + getQueryPart(`${name}[]`, value), '');
     } else if (typeof data === 'object') {
         return Object.keys(data).reduce((part, index) => part + getQueryPart(`${name}[${index}]`, data[index]), '');
     }

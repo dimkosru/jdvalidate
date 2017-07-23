@@ -5,6 +5,7 @@
   "main": "./dist/jedi-validate.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test karma start --single-run",
+    "tests": "cross-env NODE_ENV=test karma start",
     "start": "rimraf ./dist && webpack-dev-server --hot --inline --progress --colors --watch --port 4000",
     "build": "rimraf ./docs && npm run esdoc && rimraf ./dist && webpack --progress --colors",
     "lint": "eslint src/**/*.js",
