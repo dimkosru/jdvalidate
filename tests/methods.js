@@ -58,25 +58,25 @@ describe('Methods', () => {
 
     describe('filesize', () => {
         it('Should pass correct data', () => {
-            should(filesize([{size: 10}], 20)).be.true();
-            should(filesize([{size: 10}, {size: 15}], 20)).be.true();
+            should(filesize([{ size: 10 }], 20)).be.true();
+            should(filesize([{ size: 10 }, { size: 15 }], 20)).be.true();
         });
 
         it('Should not pass incorrect value', () => {
-            should(filesize([{size: 10}], 5)).be.false();
-            should(filesize([{size: 10}, {size: 15}], 12)).be.false();
+            should(filesize([{ size: 10 }], 5)).be.false();
+            should(filesize([{ size: 10 }, { size: 15 }], 12)).be.false();
         });
     });
 
     describe('extension', () => {
         it('Should pass correct data', () => {
-            should(extension([{name: 'lol.png'}], 'png|jpg')).be.true();
-            should(extension([{name: 'lol.png'}, {name: 'lol.jpg'}], 'png|jpg')).be.true();
+            should(extension([{ name: 'lol.png' }], 'png|jpg')).be.true();
+            should(extension([{ name: 'lol.png' }, { name: 'lol.jpg' }], 'png|jpg')).be.true();
         });
 
         it('Should not pass incorrect value', () => {
-            should(extension([{name: 'lol.jpeg'}], 'png|jpg')).be.false();
-            should(extension([{name: 'lol.png'}, {name: 'lol.kek'}], 'png|jpg')).be.false();
+            should(extension([{ name: 'lol.jpeg' }], 'png|jpg')).be.false();
+            should(extension([{ name: 'lol.png' }, { name: 'lol.kek' }], 'png|jpg')).be.false();
         });
     });
 

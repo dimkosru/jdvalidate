@@ -2,8 +2,8 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        'jedi-validate': './src/jedi-validate.js',
-        'jedi-validate.min': './src/jedi-validate.js',
+        'jedi-validate': './src/index.js',
+        'jedi-validate.min': './src/index.js',
     },
     devtool: 'source-map',
     output: {

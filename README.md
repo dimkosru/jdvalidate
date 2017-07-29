@@ -4,6 +4,7 @@
 [![doc coverage](http://dmitriytat.github.io/jedi-validate/badge.svg)](http://dmitriytat.github.io/jedi-validate/)
 [![Build Status](https://travis-ci.org/dmitriytat/jedi-validate.svg?branch=master)](https://travis-ci.org/dmitriytat/jedi-validate)
 [![Coverage Status](https://coveralls.io/repos/github/dmitriytat/jedi-validate/badge.svg?branch=master)](https://coveralls.io/github/dmitriytat/jedi-validate?branch=master)
+[![Dependencies](https://david-dm.org/dmitriytat/jedi-validate.svg)](https://david-dm.org/dmitriytat/jedi-validate)
 
 * [Introduction & documentation](#intro)
 * [Installation and Usage](#install)
@@ -14,10 +15,12 @@
 * [Validation Rules](#rules)
 * [Error Message](#error)
 
+
 <h1>
     <a name="intro"></a>
     Introduction
 </h1>
+
 
 Jedi Validate is a lightweight form validation component.
 

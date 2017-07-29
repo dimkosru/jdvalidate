@@ -5,57 +5,84 @@ import Dictionary from './i18n/jedi-validate-i18n';
 import { getFormOptions, getInputRules } from './lib/get-options';
 import { validateData, validateField } from './lib/validate-data';
 import { ajax } from './lib/ajax';
+import { markField, initErrorMessages } from './lib/utils';
 import defaultMethods from './lib/methods';
 
-class JediValidate {
+/**
+ * JediValidate - validation
+ */
+export default class JediValidate {
     /**
      * Object with fields
+     * @private
      * @type {Object.<string, Element>}
      */
     fields = {};
     /**
      * Object with inputs nodes
+     * @private
      * @type {Object.<string, HTMLInputElement|HTMLSelectElement|Array>}
      */
     inputs = {};
     /**
      * Object with message nodes
+     * @private
      * @type {Object.<string, Element>}
      */
     messages = {};
     /**
      * Object with error message
+     * @private
      * @type {Object.<string, Object.<string, string>>}
      */
     errorMessages = {};
     /**
      * Object with error message
+     * @private
      * @type {object} - data object
      */
     data = {};
     /**
      * Validate methods
+     * @private
      * @type {Object.<string, {func: Function, message: string}>}
      */
     methods = { ...defaultMethods };
     /* eslint-disable */
     /**
      * Validator options
-     * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: (function(object)), error: (function(object.<string, Array.<string>>))}, clean: boolean, redirect: boolean, language: string, translations: {}}}
+     * @private
+     * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: function, error: function}, clean: boolean, redirect: boolean, language: string, translations: {}}}
      */
     options = {};
     /* eslint-enable */
     /**
      * Validator rules
+     * @private
      * @type {object}
      */
     rules = {};
 
     /**
      * Translation dictionary
+     * @private
      * @type {Dictionary}
      */
     dictionary = null;
+
+    /**
+     * Elements
+     * @private
+     * @type {object}
+     */
+    nodes = null;
+
+    /**
+     * Root element
+     * @private
+     * @type {Element}
+     */
+    root = null;
 
     /**
      * JediValidate
@@ -100,7 +127,11 @@ class JediValidate {
 
         this.options = deepmerge(defaultOptions, options);
 
-        this.nodes = JediValidate.cacheNodes(this.root, this.options);
+        this.nodes = {
+            form: this.root.querySelector('form'),
+            inputs: this.root.querySelectorAll('form [name]'),
+            baseMessage: this.root.querySelector(`.${this.options.containers.baseMessage}`),
+        };
 
         const formOptions = getFormOptions(this.nodes.form);
 
@@ -114,80 +145,21 @@ class JediValidate {
 
         this.ready();
 
-        this.errorMessages = JediValidate.initErrorMessages(
+        this.errorMessages = initErrorMessages(
             this.rules,
             this.options.messages,
             this.methods,
-            this.options.language,
         );
     }
 
     /**
-     * Return object with working elements
-     * @param root Root element for search
-     * @param options Object with selectors
-     * @returns {{form: HTMLFormElement, inputs: NodeList, baseMessage: Element}}
+     * Ready
+     * @private
      */
-    static cacheNodes(root, options) {
-        return {
-            form: root.querySelector('form'),
-            inputs: root.querySelectorAll('form [name]'),
-            baseMessage: root.querySelector(`.${options.containers.baseMessage}`),
-        };
-    }
-
     ready() {
         this.nodes.form.setAttribute('novalidate', 'novalidate');
 
-        this.nodes.form.addEventListener('submit', (event) => {
-            this.data = getData(this.inputs);
-
-            const errors = validateData(
-                this.rules,
-                this.methods,
-                this.data,
-                this.errorMessages,
-                this.translate,
-            );
-
-            if (errors && Object.keys(errors).filter(name => errors[name]).length !== 0) {
-                Object.keys(errors).forEach(name =>
-                    JediValidate.markField(
-                        this.fields[name],
-                        this.messages[name],
-                        this.options.states,
-                        errors[name],
-                    ),
-                );
-
-                try {
-                    this.options.callbacks.error({ errors });
-                } catch (e) {
-                    console.error(e);
-                }
-
-                event.preventDefault();
-                return;
-            }
-
-            if (this.options.ajax && this.options.ajax.url) {
-                event.preventDefault();
-            } else {
-                try {
-                    this.options.callbacks.success({ event });
-                } catch (e) {
-                    console.error(e);
-                }
-
-                return;
-            }
-
-            const convertedData = convertData(this.data, this.options.ajax.sendType);
-            this.send({
-                ...this.options.ajax,
-                data: convertedData,
-            });
-        });
+        this.nodes.form.addEventListener('submit', this.handleSubmit);
 
         this.nodes.inputs.forEach((input) => {
             // fixme "name" and "name in data" not the same
@@ -246,51 +218,121 @@ class JediValidate {
                 });
             }
 
-            input.addEventListener('change', () => {
-                this.fields[name].classList.remove(this.options.states.dirty);
-
-                const inputData = getInputData(input);
-                const value = getValueByName(name, inputData);
-
-                // fixme don't work with 2 inputs phone[]
-                this.data = {
-                    ...this.data,
-                    ...inputData,
-                };
-
-                const errors = validateField(
-                    this.rules[name],
-                    this.methods,
-                    value,
-                    name,
-                    this.errorMessages,
-                    this.data,
-                    this.translate,
-                );
-
-                JediValidate.markField(
-                    this.fields[name],
-                    this.messages[name],
-                    this.options.states,
-                    errors,
-                );
-            });
-
-            input.addEventListener('input', () => {
-                this.fields[name].classList.remove(this.options.states.pristine);
-                this.fields[name].classList.add(this.options.states.dirty);
-            });
+            input.addEventListener('change', this.handleInputChange.bind(this, name));
+            input.addEventListener('input', this.handleInputInput.bind(this, name));
         });
     }
 
     /**
+     * Handle input change
+     * @private
+     * @param {string} name
+     */
+    handleInputChange(name) {
+        this.fields[name].classList.remove(this.options.states.dirty);
+
+        const inputData = getInputData(this.inputs[name]);
+        const value = getValueByName(name, inputData);
+
+        // fixme don't work with 2 inputs phone[]
+        this.data = {
+            ...this.data,
+            ...inputData,
+        };
+
+        const errors = validateField(
+            this.rules[name],
+            this.methods,
+            value,
+            name,
+            this.errorMessages,
+            this.data,
+            this.translate,
+        );
+
+        markField(
+            this.fields[name],
+            this.messages[name],
+            this.options.states,
+            errors,
+        );
+    }
+
+    /**
+     * Handle input
+     * @private
+     * @param {string} name
+     */
+    handleInputInput(name) {
+        this.fields[name].classList.remove(this.options.states.pristine);
+        this.fields[name].classList.add(this.options.states.dirty);
+    }
+
+    /**
+     * Handle form submit
+     * @private
+     * @param {Event} event
+     */
+    handleSubmit = (event) => {
+        this.data = getData(this.inputs);
+
+        const errors = validateData(
+            this.rules,
+            this.methods,
+            this.data,
+            this.errorMessages,
+            this.translate,
+        );
+
+        if (errors && Object.keys(errors).filter(name => errors[name]).length !== 0) {
+            Object.keys(errors).forEach(name =>
+                markField(
+                    this.fields[name],
+                    this.messages[name],
+                    this.options.states,
+                    errors[name],
+                ),
+            );
+
+            try {
+                this.options.callbacks.error({ errors });
+            } catch (e) {
+                console.error(e);
+            }
+
+            event.preventDefault();
+            return;
+        }
+
+        if (this.options.ajax && this.options.ajax.url) {
+            event.preventDefault();
+        } else {
+            try {
+                this.options.callbacks.success({ event });
+            } catch (e) {
+                console.error(e);
+            }
+
+            return;
+        }
+
+        const convertedData = convertData(this.data, this.options.ajax.sendType);
+        this.send({
+            ...this.options.ajax,
+            data: convertedData,
+        });
+    };
+
+    /**
      * Translate
+     * @private
      * @param {string} text - text to translate
      */
     translate = text => this.dictionary.translate(text, this.options.language);
 
     /**
      * Send form
+     * @private
      * @param {object} options - object with options for sending
      * @param {string} options.url
      * @param {string} options.enctype
@@ -317,7 +359,7 @@ class JediValidate {
                 }
 
                 Object.keys(response.validationErrors).forEach(name =>
-                    JediValidate.markField(
+                    markField(
                         this.fields[name],
                         this.messages[name],
                         this.options.states,
@@ -351,6 +393,7 @@ class JediValidate {
 
     /**
      * Collect data
+     * @public
      * @param {string|Array.<string>} params - field
      * @returns {Object}
      */
@@ -389,59 +432,8 @@ class JediValidate {
     }
 
     /**
-     *
-     * @param {Element} field
-     * @param message
-     * @param states
-     * @param errors
-     */
-    static markField(field, message, states, errors) {
-        if (errors && errors.length) {
-            JediValidate.markError(field, message, states, errors);
-        } else {
-            JediValidate.markValid(field, message, states);
-        }
-    }
-
-    /**
-     * Mark field as invalid
-     * @param {Element} field
-     * @param {Element} message
-     * @param {string} error
-     * @param {string} valid
-     * @param {Array.<string>} errors
-     */
-    static markError(field, message, { error, valid }, errors) {
-        if (!field || !message) {
-            return;
-        }
-
-        field.classList.add(error);
-        field.classList.remove(valid);
-
-        message.innerHTML = errors.join(', '); // eslint-disable-line no-param-reassign
-    }
-
-    /**
-     * Mark field as valid
-     * @param {Element} field
-     * @param {Element} message
-     * @param {string} error
-     * @param {string} valid
-     */
-    static markValid(field, message, { error, valid }) {
-        if (!field || !message) {
-            return;
-        }
-
-        field.classList.add(valid);
-        field.classList.remove(error);
-
-        message.innerHTML = ''; // eslint-disable-line no-param-reassign
-    }
-
-    /**
      * Add rule to validator
+     * @public
      * @param {string} rule - rule name
      * @param {Function} func - function
      * @param {string} message - error message
@@ -452,16 +444,16 @@ class JediValidate {
             message,
         };
 
-        this.errorMessages = JediValidate.initErrorMessages(
+        this.errorMessages = initErrorMessages(
             this.rules,
             this.options.messages,
             this.methods,
-            this.options.language,
         );
     }
 
     /**
      * Add localisation to JediValidate
+     * @public
      * @param {string} sourceText - text on english
      * @param {string} translatedText - text on needed language
      * @param {string} language - language
@@ -469,23 +461,4 @@ class JediValidate {
     addToDictionary(sourceText, translatedText, language) {
         this.dictionary.addTranslation(sourceText, translatedText, language);
     }
-
-    /**
-     * Init error messages
-     * @param {object} rules
-     * @param {object} messages
-     * @param {object} methods
-     * @returns {Object.<string, Object.<string, string>>}
-     */
-    static initErrorMessages(rules, messages, methods) {
-        return Object.keys(rules).reduce((names, name) => ({
-            ...names,
-            [name]: Object.keys(rules[name]).reduce((ruleNames, method) => ({
-                ...ruleNames,
-                [method]: (messages[name] && messages[name][method]) || (methods[method] && methods[method].message) || '',
-            }), {}),
-        }), {});
-    }
 }
-
-module.exports = JediValidate;

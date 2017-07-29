@@ -1,4 +1,4 @@
-import {createCheckableElement} from '../test-utils/utils';
+import { createCheckableElement } from '../test-utils/utils';
 
 import {
     convertNameToPath,
@@ -54,7 +54,6 @@ describe('Get data', () => {
 
         it('json', () => {
             assert.deepEqual(convertData(data, 'json'), JSON.stringify(data));
-
         });
 
         it('formData', () => { // fixme

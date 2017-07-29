@@ -1,4 +1,4 @@
-import {createCheckableElement} from '../test-utils/utils';
+import { createCheckableElement } from '../test-utils/utils';
 
 import {
     getData,
@@ -39,8 +39,8 @@ inputs['parent[child]'].value = data.parent.child;
 
 describe('Get data', () => {
     it('createObject', () => {
-        assert.deepEqual(createObject(['parent', 'child', ''], 'value'), {parent: {child: 'value'}});
-        assert.deepEqual(createObject(['hello', '[]'], 'value'), {hello: ['value']});
+        assert.deepEqual(createObject(['parent', 'child', ''], 'value'), { parent: { child: 'value' } });
+        assert.deepEqual(createObject(['hello', '[]'], 'value'), { hello: ['value'] });
     });
 
     it('getValueByPath', () => {
@@ -74,7 +74,7 @@ describe('Get data', () => {
 
         it('select-one', () => {
             const select = document.createElement('select');
-            select.innerHTML = `<option selected value="12">23</option>`;
+            select.innerHTML = '<option selected value="12">23</option>';
 
             assert.deepEqual(getInputValue(select), '12');
         });
@@ -98,7 +98,7 @@ describe('Get data', () => {
     });
 
     it('getInputData', () => {
-        assert.deepEqual(getInputData(inputs.phone), {phone: data.phone});
+        assert.deepEqual(getInputData(inputs.phone), { phone: data.phone });
     });
 
     it('getData', () => {
