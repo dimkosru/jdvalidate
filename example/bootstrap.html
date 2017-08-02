@@ -333,7 +333,6 @@
     });
 
     formValidator6.addMethod('alternative', function (value) {
-            // Костыль для чекбоксов, потому что они сделаны парой hidden (0) + checkbox (1)
             if (value === '0') return false;
 
             return true;
