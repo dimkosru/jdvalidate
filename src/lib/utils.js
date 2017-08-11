@@ -9,10 +9,6 @@
  * @param {Array.<string>} errors
  */
 export function markError(field, message, { error, valid }, errors) {
-    if (!field || !message) {
-        return;
-    }
-
     field.classList.add(error);
     field.classList.remove(valid);
 
@@ -29,10 +25,6 @@ export function markError(field, message, { error, valid }, errors) {
  * @param {string} classes.valid
  */
 export function markValid(field, message, { error, valid }) {
-    if (!field || !message) {
-        return;
-    }
-
     field.classList.add(valid);
     field.classList.remove(error);
 

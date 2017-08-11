@@ -284,8 +284,10 @@ export default class JediValidate {
             this.translate,
         );
 
-        if (errors && Object.keys(errors).filter(name => errors[name]).length !== 0) {
-            Object.keys(errors).forEach(name =>
+        const fieldNames = Object.keys(errors).filter(name => this.fields[name]);
+
+        if (fieldNames.length !== 0) {
+            fieldNames.forEach(name =>
                 markField(
                     this.fields[name],
                     this.messages[name],
@@ -293,7 +295,11 @@ export default class JediValidate {
                     errors[name],
                 ),
             );
+        }
 
+        const errorFieldNames = fieldNames.filter(name => errors[name]);
+
+        if (errorFieldNames.length !== 0) {
             try {
                 this.options.callbacks.error({ errors });
             } catch (e) {
@@ -398,37 +404,37 @@ export default class JediValidate {
      * @returns {Object}
      */
     collect(params = '') {
-        if (params) {
-            if (Array.isArray(params)) {
-                return params.reduce((collected, name) => {
-                    const inputData = getInputData(this.inputs[name]);
+        if (!params) {
+            this.data = getData(this.inputs);
 
-                    this.data = {
-                        ...this.data,
-                        ...inputData,
-                    };
-
-                    return {
-                        ...collected,
-                        ...inputData,
-                    };
-                }, {});
-            }
-
-            const inputData = getInputData(this.inputs[params]);
-
-            // fixme don't work with 2 inputs phone[]
-            this.data = {
-                ...this.data,
-                ...inputData,
-            };
-
-            return inputData;
+            return this.data;
         }
 
-        this.data = getData(this.inputs);
+        if (Array.isArray(params)) {
+            return params.reduce((collected, name) => {
+                const inputData = getInputData(this.inputs[name]);
 
-        return this.data;
+                this.data = {
+                    ...this.data,
+                    ...inputData,
+                };
+
+                return {
+                    ...collected,
+                    ...inputData,
+                };
+            }, {});
+        }
+
+        const inputData = getInputData(this.inputs[params]);
+
+        // fixme don't work with 2 inputs phone[]
+        this.data = {
+            ...this.data,
+            ...inputData,
+        };
+
+        return inputData;
     }
 
     /**

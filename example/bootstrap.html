@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Name:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="name" type="text" class="form-control" id="name" placeholder="First Last"
                                        pattern="\w+\s.\w+" required>
                             </div>
@@ -37,7 +37,7 @@
                         <div class="form-group">
                             <label for="phone1" class="col-sm-2 control-label">Phone:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="phone[0]" type="tel" class="form-control" id="phone1" placeholder="Phone"
                                        required>
                             </div>
@@ -45,7 +45,7 @@
                         <div class="form-group">
                             <label for="phone2" class="col-sm-2 control-label">Phone #2:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="phone[1]" type="tel" class="form-control" id="phone2"
                                        placeholder="Phone #2">
                             </div>
@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label for="email" class="col-sm-2 control-label">E-mail:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="email" type="email" class="form-control" id="email" placeholder="E-mail"
                                        required>
                             </div>
@@ -61,12 +61,12 @@
                         <div class="form-group">
                             <label for="file" class="col-sm-2 control-label">File (html, css, txt):</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="file" type="file" class="form-control" id="file" multiple>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
+                            <div class="col-sm-offset-2 col-sm-4">
                                 <div class="radio">
                                     <label><input type="radio" name="optradio" value="1" required checked>Option
                                         1</label>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
+                            <div class="col-sm-offset-2 col-sm-4">
                                 <div class="checkbox">
                                     <label>
                                         <input name="check" type="checkbox" required> Check it:
@@ -104,7 +104,7 @@
                         <div class="form-group">
                             <label for="text" class="col-sm-2 control-label">Text:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <textarea name="text" id="text" cols="30" rows="10" required></textarea>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                         <div class="form-group">
                             <label for="select" class="col-sm-2 control-label">select:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <select name="select" id="select" required>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -133,7 +133,7 @@
                         <div class="form-group">
                             <label for="select2" class="col-sm-2 control-label">multiple:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <select name="select2" id="select2" multiple="multiple" required>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -154,7 +154,7 @@
                         <div class="form-group">
                             <label for="phoned1" class="col-sm-2 control-label">Phone:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="phone[]" type="tel" class="form-control" id="phoned1" placeholder="Phone"
                                        required value="1">
                             </div>
@@ -162,7 +162,7 @@
                         <div class="form-group">
                             <label for="phoned2" class="col-sm-2 control-label">Phone #2:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="phone[]" type="tel" class="form-control" id="phoned2"
                                        placeholder="Phone #2" value="2">
                             </div>
@@ -178,7 +178,7 @@
                 <div class="panel-body" id="form5">
                     <form id="myForm5" action="./ajax.php" method="post" class="form-horizontal">
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
+                            <div class="col-sm-offset-2 col-sm-4">
                                 <div class="checkbox">
                                     <label>
                                         <input name="checkbox" type="checkbox"> Validate phone:
@@ -189,9 +189,38 @@
                         <div class="form-group">
                             <label for="phonedv2" class="col-sm-2 control-label">Phone:</label>
 
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input name="phone" type="text" class="form-control" id="phonedv2" placeholder="Phone">
                             </div>
+                        </div>
+                        <hr/>
+                        <button type="submit" class="btn  btn-lg btn-success pull-right">Send</button>
+                    </form>
+                    <div class="base-error alert alert-danger" role="alert" style="display: none"></div>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">Complicated depended fields</div>
+                <div class="panel-body" id="form6">
+                    <form id="myForm6" action="./ajax.php" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-4">
+                                <input type="hidden" value="0" name="complicated1">
+                                <label class="checkbox checkbox_size_m checkbox-group__checkbox">
+                                    <input type="checkbox" value="1" name="complicated1"> First
+                                </label>
+                                <input type="hidden" value="0" name="complicated2">
+                                <label class="checkbox checkbox_size_m checkbox-group__checkbox">
+                                    <input type="checkbox" value="1" name="complicated2"> Second
+                                </label>
+                                <input type="hidden" value="0" name="complicated3">
+                                <label class="checkbox checkbox_size_m checkbox-group__checkbox">
+                                    <input type="checkbox" value="1" name="complicated3"> Third
+                                </label>
+                                <br>
+                                <input class="form-control" name="alternative" placeholder="Alternative">
+                            </div>
+                            <div class="field__error"></div>
                         </div>
                         <hr/>
                         <button type="submit" class="btn  btn-lg btn-success pull-right">Send</button>
@@ -276,6 +305,57 @@
             }
         },
     }));
+
+    var formValidator6 = new JediValidate(document.querySelector('#form6'), {
+        states: {
+            error: 'has-error',
+            valid: 'has-success',
+            dirty: 'has-warning'
+        },
+        rules: {
+            complicated1: {
+                required: [true, checkAlter.bind(null, ['complicated2', 'complicated3', 'alternative'])],
+                alternative: [true, checkAlter.bind(null, ['complicated2', 'complicated3', 'alternative'])],
+            },
+            complicated2: {
+                required: [true, checkAlter.bind(null, ['complicated1', 'complicated3', 'alternative'])],
+                alternative: [true, checkAlter.bind(null, ['complicated1', 'complicated3', 'alternative'])],
+            },
+            complicated3: {
+                required: [true, checkAlter.bind(null, ['complicated1', 'complicated2', 'alternative'])],
+                alternative: [true, checkAlter.bind(null, ['complicated1', 'complicated2', 'alternative'])],
+            },
+            alternative: {
+                required: [true, checkAlter.bind(null, ['complicated1', 'complicated2', 'complicated3'])],
+                alternative: [true, checkAlter.bind(null, ['complicated1', 'complicated2', 'complicated3'])],
+            }
+        }
+    });
+
+    formValidator6.addMethod('alternative', function (value) {
+            if (value === '0') return false;
+
+            return true;
+        }, 'At least one field must be filled',
+    );
+
+    function checkAlter(names) {
+        var values = formValidator6.collect(names);
+        console.log(values)
+
+        return Object.keys(values)
+            .map(function (key) {
+                return values[key];
+            })
+            .reduce(function (check, value) {
+                value = typeof value === 'string' ? value.trim() : value;
+
+                var isNotEmpty = !!value;
+                var isNotZero = value !== "0";
+
+                return check && !(isNotEmpty && isNotZero);
+            }, true);
+    }
 </script>
 </body>
 
