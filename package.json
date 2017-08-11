@@ -69,6 +69,7 @@
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "deepmerge": "^1.5.0"
+    "deepmerge": "^1.5.0",
+    "esdoc-standard-plugin": "^1.0.0"
   }
 }
