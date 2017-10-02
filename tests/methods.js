@@ -8,6 +8,9 @@ import {
     extension,
     tel,
     url,
+    min,
+    max,
+    step,
 } from '../src/lib/methods';
 
 
@@ -109,6 +112,42 @@ describe('Methods', () => {
             should(url('http://гитхаб.рф')).be.true();
             should(url('http://гитхаб.рф/?ddd=привет')).be.true();
             should(url('гитхаб.рф')).be.true();
+        });
+    });
+
+    describe('min', () => {
+        it('Should pass correct data', () => {
+            should(min(10, 5)).be.true();
+            should(min(5, 5)).be.true();
+        });
+
+        it('Should not pass incorrect value', () => {
+            should(min(1, 5)).be.false();
+            should(min(1111, 5000)).be.false();
+        });
+    });
+
+    describe('max', () => {
+        it('Should pass correct data', () => {
+            should(max(10, 50)).be.true();
+            should(max(5, 5)).be.true();
+        });
+
+        it('Should not pass incorrect value', () => {
+            should(max(5, 1)).be.false();
+            should(max(5000, 1111)).be.false();
+        });
+    });
+
+    describe('step', () => {
+        it('Should pass correct data', () => {
+            should(step(5, 5)).be.true();
+            should(step(100, 10)).be.true();
+        });
+
+        it('Should not pass incorrect value', () => {
+            should(step(5, 12)).be.false();
+            should(step(4, 3)).be.false();
         });
     });
 });

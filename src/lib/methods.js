@@ -68,6 +68,36 @@ export function url(value) {
     return /[-a-zA-Z0-9@:%_+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&//=]*)?/gi.test(value);
 }
 
+/**
+ * Check value is greater than min number
+ * @param {number} value - number
+ * @param {number} number - min number
+ * @returns {boolean} - true == valid, false == invalid
+ */
+export function min(value, number) {
+    return number <= value;
+}
+
+/**
+ * Check value is greater than max number
+ * @param {number} value - number
+ * @param {number} number - max number
+ * @returns {boolean} - true == valid, false == invalid
+ */
+export function max(value, number) {
+    return value <= number;
+}
+
+/**
+ * Check value is multiple of number
+ * @param {number} value - number
+ * @param {number} number - factor
+ * @returns {boolean} - true == valid, false == invalid
+ */
+export function step(value, number) {
+    return value % number === 0;
+}
+
 
 export default {
     required: {
@@ -97,5 +127,17 @@ export default {
     url: {
         func: url,
         message: 'Wrong url',
+    },
+    min: {
+        func: min,
+        message: 'This number is too less',
+    },
+    max: {
+        func: max,
+        message: 'This number is too large',
+    },
+    step: {
+        func: step,
+        message: 'This value is not a multiple of the specified step value',
     },
 };
