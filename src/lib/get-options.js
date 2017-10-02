@@ -39,10 +39,14 @@ export function getInputRules(input) {
     }, {});
 
     const regexp = input.hasAttribute('pattern') ? new RegExp(input.getAttribute('pattern')) : undefined;
+    const min = input.hasAttribute('min') ? parseInt(input.getAttribute('min'), 10) : undefined;
+    const max = input.hasAttribute('max') ? parseInt(input.getAttribute('max'), 10) : undefined;
+    const step = input.hasAttribute('step') ? parseInt(input.getAttribute('step'), 10) : undefined;
 
-    if (regexp) {
-        rules.regexp = regexp;
-    }
+    if (regexp) rules.regexp = regexp;
+    if (min) rules.min = min;
+    if (max) rules.max = max;
+    if (step) rules.step = step;
 
     return rules;
 }
