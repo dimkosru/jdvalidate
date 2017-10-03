@@ -52,30 +52,30 @@ export function convertData(data, type) {
     let convertedData;
 
     switch (type) {
-    case 'serialize':
-        convertedData = Object.keys(data)
-            .reduce((query, name) => `${query}${getQueryPart(name, data[name])}`, '');
-        return convertedData.length ? convertedData.slice(0, -1) : '';
-    case 'formData':
-        return Object.keys(data).reduce((formData, name) => {
-            if (data[name] instanceof FileList) {
-                if (data[name].length > 1) {
-                    for (let i = 0; i < data[name].length; i += 1) {
-                        formData.append(`${name}[${i}]`, data[name][i]);
+        case 'serialize':
+            convertedData = Object.keys(data)
+                .reduce((query, name) => `${query}${getQueryPart(name, data[name])}`, '');
+            return convertedData.length ? convertedData.slice(0, -1) : '';
+        case 'formData':
+            return Object.keys(data).reduce((formData, name) => {
+                if (data[name] instanceof FileList) {
+                    if (data[name].length > 1) {
+                        for (let i = 0; i < data[name].length; i += 1) {
+                            formData.append(`${name}[${i}]`, data[name][i]);
+                        }
+                    } else if (data[name].length === 1) {
+                        formData.append(name, data[name][0]);
                     }
-                } else if (data[name].length === 1) {
-                    formData.append(name, data[name][0]);
+                } else if (typeof data[name] === 'object') {
+                    Object.keys(data[name]).forEach(key => formData.append(`${name}[${key}]`, data[name][key]));
+                } else {
+                    formData.append(name, data[name]);
                 }
-            } else if (typeof data[name] === 'object') {
-                Object.keys(data[name]).forEach(key => formData.append(`${name}[${key}]`, data[name][key]));
-            } else {
-                formData.append(name, data[name]);
-            }
 
-            return formData;
-        }, new FormData());
-    case 'json':
-    default:
-        return JSON.stringify(data);
+                return formData;
+            }, new FormData());
+        case 'json':
+        default:
+            return JSON.stringify(data);
     }
 }

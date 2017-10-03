@@ -101,7 +101,8 @@ describe('Jedi Validate', () => {
     });
 
     it('addMethod', () => {
-        const check = () => {};
+        const check = () => {
+        };
         validator.addMethod('check', check, 'check error');
 
         should(validator.methods.check.func).be.equal(check);
@@ -141,7 +142,9 @@ describe('Jedi Validate', () => {
         it('Error on callback', () => {
             validator.send = sinon.spy();
             validator.addMethod('check', () => true, 'check error');
-            validator.options.callbacks.error = () => { throw new Error('error'); };
+            validator.options.callbacks.error = () => {
+                throw new Error('error');
+            };
 
             should(validator.handleSubmit(new Event('submit'))).not.throw();
         });
@@ -160,7 +163,9 @@ describe('Jedi Validate', () => {
         it('Success throw callback', () => {
             validator.send = sinon.spy();
             validator.addMethod('check', () => true, 'check error');
-            validator.options.callbacks.success = () => { throw new Error('error'); };
+            validator.options.callbacks.success = () => {
+                throw new Error('error');
+            };
             validator.options.ajax = false;
             validator.root.querySelector('#phoned2').value = 231232322;
 

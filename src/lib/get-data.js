@@ -66,17 +66,17 @@ export function getInputValue(input) {
     }
 
     switch (type) {
-    case 'select-one':
-        return input.options && input.options[input.selectedIndex] ? input.options[input.selectedIndex].value : '';
-    case 'select-multiple':
-        return [...input.options].filter(option => option.selected).map(option => option.value);
-    case 'checkbox':
-    case 'radio':
-        return input.checked ? input.value : '';
-    case 'file':
-        return input.files;
-    default:
-        return input.value;
+        case 'select-one':
+            return input.options && input.options[input.selectedIndex] ? input.options[input.selectedIndex].value : '';
+        case 'select-multiple':
+            return [...input.options].filter(option => option.selected).map(option => option.value);
+        case 'checkbox':
+        case 'radio':
+            return input.checked ? input.value : '';
+        case 'file':
+            return input.files;
+        default:
+            return input.value;
     }
 }
 

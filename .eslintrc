@@ -1,40 +1,47 @@
 {
-  "parser": "babel-eslint",
-  "extends": "airbnb",
-  "plugins": [
-    "react",
-    "jsx-a11y",
-    "import"
-  ],
-  "rules": {
-    "indent": [
-      "error",
-      4
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
     ],
-    "no-plusplus": [
-      "error",
-      {
-        "allowForLoopAfterthoughts": true
-      }
-    ],
-    "no-console": [
-      "error",
-      {
-        "allow": ["warn", "error"]
-      }
-    ],
-    "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
-  },
-  "globals": {
-    "module": true,
-    "window": true,
-    "XMLHttpRequest": true,
-    "document": true,
-    "FormData": true,
-    "FileList": true,
-    "describe": true,
-    "it": true,
-    "assert": true
-  }
+    "rules": {
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "no-plusplus": [
+            "error",
+            {
+                "allowForLoopAfterthoughts": true
+            }
+        ],
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ],
+        "jsx-a11y/href-no-hash": "off",
+        "jsx-a11y/anchor-is-valid": [
+            "warn",
+            {
+                "aspects": [
+                    "invalidHref"
+                ]
+            }
+        ]
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "jasmine": true
+    }
 }

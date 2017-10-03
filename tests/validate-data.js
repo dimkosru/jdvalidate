@@ -58,8 +58,14 @@ describe('Validate data', () => {
 
         it('Pass incorrect value', () => {
             assert.deepEqual(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data, translate), [errorMessages.phone2.regexp]);
-            assert.deepEqual(validateField({ ...rules.phone, url: null }, methods, 'dfsdf', 'phone', errorMessages, data, translate), ['Only digits available']);
-            assert.deepEqual(validateField({ ...rules.phone, lol: true }, methods, data.phone, 'phone', errorMessages, data, translate), ['Method "lol" not found']);
+            assert.deepEqual(validateField({
+                ...rules.phone,
+                url: null
+            }, methods, 'dfsdf', 'phone', errorMessages, data, translate), ['Only digits available']);
+            assert.deepEqual(validateField({
+                ...rules.phone,
+                lol: true
+            }, methods, data.phone, 'phone', errorMessages, data, translate), ['Method "lol" not found']);
         });
     });
 
@@ -128,7 +134,9 @@ describe('Validate data', () => {
 
         it('Should not throw error if function incorrect', () => {
             should(() => {
-                isCheckable([true, () => { throw new Error('error'); }], {});
+                isCheckable([true, () => {
+                    throw new Error('error');
+                }], {});
             }).not.throw();
         });
 

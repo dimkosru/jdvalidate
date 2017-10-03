@@ -1,15 +1,15 @@
 {
-  "validationErrors": {
-    "base": [
-      "Form validation error",
-      "Error 145"
-    ],
-    "name": [
-      "Name is required",
-      "Another error"
-    ],
-    "email": [
-      "E-mail is not valid"
-    ]
-  }
+    "validationErrors": {
+        "base": [
+            "Form validation error",
+            "Error 145"
+        ],
+        "name": [
+            "Name is required",
+            "Another error"
+        ],
+        "email": [
+            "E-mail is not valid"
+        ]
+    }
 }

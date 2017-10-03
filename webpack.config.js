@@ -1,13 +1,17 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
-module.exports = {
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+const config = {
     entry: {
         'jedi-validate': './src/index.js',
         'jedi-validate.min': './src/index.js',
     },
     devtool: 'source-map',
     output: {
-        path: __dirname + '/dist',
+        path: `${__dirname}/dist`,
         filename: '[name].js',
         libraryTarget: 'umd',
         library: 'JediValidate',
@@ -34,9 +38,32 @@ module.exports = {
         ],
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            include: /\.min\.js$/,
-            minimize: true,
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(NODE_ENV),
+            },
         }),
     ],
 };
+
+if (NODE_ENV === 'production') {
+    config.plugins.push(
+        new MinifyPlugin(
+            {
+                removeDebugger: true,
+            },
+            {
+                test: /\.min\.js$/,
+                comments: false,
+            },
+        ),
+    );
+
+    config.plugins.push(
+        new CompressionPlugin({
+            test: /\.min\.js$/,
+        }),
+    );
+}
+
+module.exports = config;

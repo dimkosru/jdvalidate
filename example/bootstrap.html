@@ -3,13 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Jedi Validate - Lightweight form validation component.</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-theme.min.css"/>
-    <script
-            src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-            crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -271,9 +267,9 @@
             }
         },
         callbacks: {
-            success: function(response) {
+            success: function (response) {
             },
-            error: function(errors) {
+            error: function (errors) {
             }
         }
     };
@@ -304,7 +300,7 @@
         },
         rules: {
             phone: {
-                required: [true, function(oldData) {
+                required: [true, function (oldData) {
                     const newData = validator.collect('checkbox'); // manual data recollect for concrete field
                     return !!newData['checkbox'];
                 }],

@@ -1,13 +1,13 @@
 {
-  "ru": {
-    "This field is required": "Это поле необходимо заполнить",
-    "Please, provide correct value": "Пожалуйста, введите корректное значение",
-    "This email is incorrect": "Пожалуйста, введите корректный адрес электронной почты",
-    "This file is too large": "Попробуйте загрузить файл поменьше",
-    "This extension is not supported": "Пожалуйста, выберите файл с правильным расширением",
-    "This phone number is incorrect": "Не корректный номер телефона",
-    "Wrong url": "Не корректный url",
-    "Can not send form!": "Форма не отправлена!",
-    "JSON parsing error": "Ошибка разбора JSON"
-  }
+    "ru": {
+        "This field is required": "Это поле необходимо заполнить",
+        "Please, provide correct value": "Пожалуйста, введите корректное значение",
+        "This email is incorrect": "Пожалуйста, введите корректный адрес электронной почты",
+        "This file is too large": "Попробуйте загрузить файл поменьше",
+        "This extension is not supported": "Пожалуйста, выберите файл с правильным расширением",
+        "This phone number is incorrect": "Не корректный номер телефона",
+        "Wrong url": "Не корректный url",
+        "Can not send form!": "Форма не отправлена!",
+        "JSON parsing error": "Ошибка разбора JSON"
+    }
 }
