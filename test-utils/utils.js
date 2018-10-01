@@ -1,5 +1,5 @@
 /**
- * Create checkable element radio or checkbox
+ * Create checkable element (radio or checkbox)
  * @param name
  * @param value
  * @param checked

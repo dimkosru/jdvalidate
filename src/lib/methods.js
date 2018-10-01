@@ -1,7 +1,7 @@
 /**
  * Check value is not empty
  * @param {string|FileList|Array} value
- * @returns {boolean} - true=valid, false=invalid
+ * @returns {boolean} - true == valid, false == invalid
  */
 export function required(value) {
     if (!value) return false;
@@ -31,7 +31,7 @@ export function email(value) {
 }
 
 /**
- * Check files size less then max
+ * Check size of all files is less then max
  * @param {FileList} value - FileList
  * @param {number} size - max file size
  * @returns {boolean} - true == valid, false == invalid
@@ -41,7 +41,7 @@ export function filesize(value, size) {
 }
 
 /**
- * Check files extensions
+ * Check the extension of all files
  * @param {FileList} value - FileList
  * @param {string} extensions - extensions list
  * @returns {boolean} - true == valid, false == invalid
@@ -51,8 +51,8 @@ export function extension(value, extensions) {
 }
 
 /**
- * Check value is phone
- * @param {string} value - phone
+ * Check value is phone number
+ * @param {string} value - phone number
  * @returns {boolean} - true == valid, false == invalid
  */
 export function tel(value) {

@@ -86,7 +86,7 @@ export default class JediValidate {
 
     /**
      * JediValidate
-     * @param {HTMLElement} root - element which wrap form element
+     * @param {HTMLElement} root - element which wraps form element
      * @param {object} options - object with options
      */
     constructor(root, options = {}) {
@@ -466,7 +466,7 @@ export default class JediValidate {
     }
 
     /**
-     * Add localisation to JediValidate
+     * Add localization to JediValidate
      * @public
      * @param {string} sourceText - text on english
      * @param {string} translatedText - text on needed language
