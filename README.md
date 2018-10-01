@@ -29,7 +29,7 @@ Jedi Validate is a lightweight form validation component.
 
 ## How Can I Use It?
 
-This is a JS class, and you can create a new instance by passing in a DOM element and an options object.
+This is a JS class and you can create a new instance by passing in a DOM element and an options object.
 
 ```javascript
 // npm install jedi-validate
@@ -45,13 +45,13 @@ By default, the form will be sent via ajax with the parameters which were set in
 
 ## Why Should I Use It?
 
-Because it provides a strict json format for interaction. You can send a form in many different ways:
+Because it provides a strict json format for interaction, you can send a form in many different ways:
 
 * serialized
 * as a JSON object
 * as FormData.
 
-But server answer always has one structure. It is easier to implement.
+But server answer always has one structure, it is easier to implement.
 
 <h2>
     <a name="install"></a>
@@ -82,7 +82,7 @@ npm run dev
 This will open a webpack local server where you can navigate to the desired directory or resource. The test page is located in **`example/bootstrap.html`**
 
 ### Running Tests
-The tests are not yet complete, and runtime errors will occur when attempting to run the tests in the console or through the test browser.
+The tests are not yet complete and runtime errors will occur when attempting to run the tests in the console or through the test browser.
 
 <h1>
     <a name="options"></a>
