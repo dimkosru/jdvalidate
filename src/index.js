@@ -1,3 +1,3 @@
-import JediValidate from './jedi-validate';
+const JediValidate = require('./jedi-validate').default;
 
 module.exports = JediValidate;

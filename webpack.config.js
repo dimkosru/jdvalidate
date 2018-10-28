@@ -7,7 +7,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const config = {
     mode: 'none',
     entry: {
-        'jedi-validate':  './src/index.js',
+        'jedi-validate': './src/index.js',
         'jedi-validate.min': './src/index.js',
     },
     devtool: 'source-map',

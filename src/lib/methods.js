@@ -37,7 +37,7 @@ export function email(value) {
  * @returns {boolean} - true == valid, false == invalid
  */
 export function filesize(value, size) {
-    return [...value].reduce((r, file) => file.size < size && r, true);
+    return Array.from(value).reduce((r, file) => file.size < size && r, true);
 }
 
 /**
@@ -47,7 +47,7 @@ export function filesize(value, size) {
  * @returns {boolean} - true == valid, false == invalid
  */
 export function extension(value, extensions) {
-    return [...value].reduce((r, file) => extensions.indexOf(file.name.split('.').pop()) !== -1 && r, true);
+    return Array.from(value).reduce((r, file) => extensions.indexOf(file.name.split('.').pop()) !== -1 && r, true);
 }
 
 /**
