@@ -13,7 +13,9 @@ export function createObject(path, value) {
 
     if (!segment || segment.length === 0) {
         return value;
-    } else if (segment === '[]') {
+    }
+
+    if (segment === '[]') {
         return [createObject(path.slice(1), value)];
     }
 

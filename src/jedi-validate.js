@@ -18,30 +18,35 @@ export default class JediValidate {
      * @type {Object.<string, Element>}
      */
     fields = {};
+
     /**
      * Object with inputs nodes
      * @private
      * @type {Object.<string, HTMLInputElement|HTMLSelectElement|Array>}
      */
     inputs = {};
+
     /**
      * Object with message nodes
      * @private
      * @type {Object.<string, Element>}
      */
     messages = {};
+
     /**
      * Object with error message
      * @private
      * @type {Object.<string, Object.<string, string>>}
      */
     errorMessages = {};
+
     /**
      * Object with error message
      * @private
      * @type {object} - data object
      */
     data = {};
+
     /**
      * Validate methods
      * @private
@@ -55,6 +60,7 @@ export default class JediValidate {
      * @type {{ajax: {url: string, enctype: string, sendType: string, method: string}, rules: {}, messages: {}, containers: {parent: string, message: string, baseMessage: string}, states: {error: string, valid: string, pristine: string, dirty: string}, formStatePrefix: string, callbacks: {success: function, error: function}, clean: boolean, redirect: boolean, language: string, translations: {}}}
      */
     options = {};
+
     /* eslint-enable */
     /**
      * Validator rules
@@ -287,13 +293,12 @@ export default class JediValidate {
         const fieldNames = Object.keys(errors).filter(name => this.fields[name]);
 
         if (fieldNames.length !== 0) {
-            fieldNames.forEach(name =>
-                markField(
-                    this.fields[name],
-                    this.messages[name],
-                    this.options.states,
-                    errors[name],
-                ));
+            fieldNames.forEach(name => markField(
+                this.fields[name],
+                this.messages[name],
+                this.options.states,
+                errors[name],
+            ));
         }
 
         const errorFieldNames = fieldNames.filter(name => errors[name]);
@@ -369,13 +374,12 @@ export default class JediValidate {
                     this.nodes.baseMessage.innerHTML = '';
                 }
 
-                Object.keys(response.validationErrors).forEach(name =>
-                    markField(
-                        this.fields[name],
-                        this.messages[name],
-                        this.options.states,
-                        response.validationErrors[name],
-                    ));
+                Object.keys(response.validationErrors).forEach(name => markField(
+                    this.fields[name],
+                    this.messages[name],
+                    this.options.states,
+                    response.validationErrors[name],
+                ));
             } else {
                 try {
                     this.options.callbacks.success({ response });

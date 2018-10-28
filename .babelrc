@@ -1,14 +1,14 @@
 {
     "presets": [
-        ["env", {
+        ["@babel/env", {
             "targets": {
                 "browsers": ["last 2 versions"]
-            }
+            },
+            "useBuiltIns": "usage"
         }]
     ],
     "plugins": [
-        "transform-class-properties",
-        "transform-object-rest-spread"
+        "@babel/plugin-proposal-class-properties",
     ],
     "env": {
         "test": {

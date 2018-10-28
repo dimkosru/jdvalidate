@@ -61,7 +61,7 @@ describe('Get data', () => {
                 this.data = {};
             }
 
-            FD.prototype.append = function (name, item) {
+            FD.prototype.append = function append(name, item) {
                 this.data = {
                     ...this.data,
                     [name]: item,
