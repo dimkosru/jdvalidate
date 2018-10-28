@@ -43,9 +43,6 @@
     "env": {
         "browser": true,
         "node": true,
-        "mocha": true
-    },
-    "globals": {
-        "assert": true
+        "jest": true
     }
 }

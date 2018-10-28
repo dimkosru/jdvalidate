@@ -3,7 +3,7 @@ node_js:
   - stable
 script:
   - npm run build
-  - npm run test
+  - npm run test:coveralls
 deploy:
   - provider: pages
     target-branch: gh-pages

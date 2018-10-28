@@ -36,24 +36,24 @@ inputs['parent[child]'].value = data.parent.child;
 
 describe('Get data', () => {
     it('getQueryPart', () => {
-        assert.deepEqual(getQueryPart('phone', data.phone), `phone=${data.phone}&`);
-        assert.deepEqual(getQueryPart('phone', ['1']), 'phone[]=1&');
-        assert.deepEqual(getQueryPart('phone', ['1', '2']), 'phone[]=1&phone[]=2&');
-        assert.deepEqual(getQueryPart('parent', data.parent), 'parent[child]=value&');
+        expect(getQueryPart('phone', data.phone)).toEqual(`phone=${data.phone}&`);
+        expect(getQueryPart('phone', ['1'])).toEqual('phone[]=1&');
+        expect(getQueryPart('phone', ['1', '2'])).toEqual('phone[]=1&phone[]=2&');
+        expect(getQueryPart('parent', data.parent)).toEqual('parent[child]=value&');
     });
 
     it('convertNameToPath', () => {
-        assert.deepEqual(convertNameToPath('parent[child]'), ['parent', 'child', '']);
+        expect(convertNameToPath('parent[child]')).toEqual(['parent', 'child', '']);
     });
 
     describe('convertData', () => {
         it('serialize', () => {
-            assert.deepEqual(convertData(data, 'serialize'), 'phone=92356234&phone2=sdfsefef&radio=2&array[]=1&array[]=2&parent[child]=value');
-            assert.deepEqual(convertData({}, 'serialize'), '');
+            expect(convertData(data, 'serialize')).toEqual('phone=92356234&phone2=sdfsefef&radio=2&array[]=1&array[]=2&parent[child]=value');
+            expect(convertData({}, 'serialize')).toEqual('');
         });
 
         it('json', () => {
-            assert.deepEqual(convertData(data, 'json'), JSON.stringify(data));
+            expect(convertData(data, 'json')).toEqual(JSON.stringify(data));
         });
 
         it('formData', () => {
@@ -73,20 +73,20 @@ describe('Get data', () => {
             const files2 = [23, 42];
             const files3 = [23, 42, 42];
 
-            assert.deepEqual(convertData({ file: files0 }, 'formData', Array, FD).data, {});
-            assert.deepEqual(convertData({ file: files1 }, 'formData', Array, FD).data, { file: 42 });
-            assert.deepEqual(convertData({ file: files2 }, 'formData', Array, FD).data, {
+            expect(convertData({ file: files0 }, 'formData', Array, FD).data).toEqual({});
+            expect(convertData({ file: files1 }, 'formData', Array, FD).data).toEqual({ file: 42 });
+            expect(convertData({ file: files2 }, 'formData', Array, FD).data).toEqual({
                 'file[0]': 23,
                 'file[1]': 42,
             });
-            assert.deepEqual(convertData({ file: files3 }, 'formData', Array, FD).data, {
+            expect(convertData({ file: files3 }, 'formData', Array, FD).data).toEqual({
                 'file[0]': 23,
                 'file[1]': 42,
                 'file[2]': 42,
             });
 
-            assert.deepEqual(convertData({ file: { lol: 'lal' } }, 'formData', Array, FD).data, { 'file[lol]': 'lal' });
-            assert.deepEqual(convertData({ file: 'kek' }, 'formData', Array, FD).data, { file: 'kek' });
+            expect(convertData({ file: { lol: 'lal' } }, 'formData', Array, FD).data).toEqual({ 'file[lol]': 'lal' });
+            expect(convertData({ file: 'kek' }, 'formData', Array, FD).data).toEqual({ file: 'kek' });
         });
     });
 });

@@ -1,5 +1,3 @@
-import should from 'should';
-
 import {
     getFormOptions,
     getInputRules,
@@ -20,7 +18,7 @@ describe('Get options', () => {
             form.setAttribute('action', 'hello.kitty');
             form.setAttribute('method', 'POST');
 
-            should(getFormOptions(form)).be.deepEqual({
+            expect(getFormOptions(form)).toEqual({
                 ajax: {
                     enctype: 'application/x-www-form-urlencoded',
                     url: 'hello.kitty',
@@ -35,7 +33,7 @@ describe('Get options', () => {
             form.setAttribute('action', 'hello.kitty');
             form.setAttribute('method', 'POST');
 
-            should(getFormOptions(form)).be.deepEqual({
+            expect(getFormOptions(form)).toEqual({
                 ajax: {
                     enctype: 'multipart/form-data',
                     url: 'hello.kitty',
@@ -52,31 +50,31 @@ describe('Get options', () => {
         });
 
         it('Should return empty', () => {
-            should(getInputRules(input)).be.deepEqual({});
+            expect(getInputRules(input)).toEqual({});
         });
 
         it('Should return required', () => {
             input.setAttribute('required', '');
 
-            should(getInputRules(input)).be.deepEqual({ required: true });
+            expect(getInputRules(input)).toEqual({ required: true });
         });
 
         it('Should return email by type', () => {
             input.setAttribute('type', 'email');
 
-            should(getInputRules(input)).be.deepEqual({ email: true });
+            expect(getInputRules(input)).toEqual({ email: true });
         });
 
         it('Should return url by class', () => {
             input.setAttribute('class', 'url');
 
-            should(getInputRules(input)).be.deepEqual({ url: true });
+            expect(getInputRules(input)).toEqual({ url: true });
         });
 
         it('Should return regexp', () => {
             input.setAttribute('pattern', '123');
 
-            should(getInputRules(input)).be.deepEqual({ regexp: new RegExp('123') });
+            expect(getInputRules(input)).toEqual({ regexp: new RegExp('123') });
         });
 
         it('Should return number input rules', () => {
@@ -85,7 +83,7 @@ describe('Get options', () => {
             input.setAttribute('max', '20');
             input.setAttribute('step', '5');
 
-            should(getInputRules(input)).be.deepEqual({
+            expect(getInputRules(input)).toEqual({
                 min: 10,
                 max: 20,
                 step: 5,
@@ -97,7 +95,7 @@ describe('Get options', () => {
             input.setAttribute('min', '2017/04/01');
             input.setAttribute('max', '2019/04/01');
 
-            should(getInputRules(input)).be.deepEqual({
+            expect(getInputRules(input)).toEqual({
                 minDate: new Date('2017/04/01'),
                 maxDate: new Date('2019/04/01'),
             });

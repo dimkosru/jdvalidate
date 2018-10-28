@@ -1,5 +1,3 @@
-import should from 'should';
-
 import {
     validateField,
     validateData,
@@ -53,26 +51,26 @@ function translate(text) {
 describe('Validate data', () => {
     describe('Validate Field', () => {
         it('Pass correct value', () => {
-            assert.deepEqual(validateField(rules.phone, methods, data.phone, 'phone', errorMessages, data, translate), []);
+            expect(validateField(rules.phone, methods, data.phone, 'phone', errorMessages, data, translate)).toEqual([]);
         });
 
         it('Pass incorrect value', () => {
-            assert.deepEqual(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data, translate), [errorMessages.phone2.regexp]);
-            assert.deepEqual(validateField({
+            expect(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data, translate)).toEqual( [errorMessages.phone2.regexp]);
+            expect(validateField({
                 ...rules.phone,
                 url: null,
-            }, methods, 'dfsdf', 'phone', errorMessages, data, translate), ['Only digits available']);
-            assert.deepEqual(validateField({
+            }, methods, 'dfsdf', 'phone', errorMessages, data, translate)).toEqual( ['Only digits available']);
+            expect(validateField({
                 ...rules.phone,
                 lol: true,
-            }, methods, data.phone, 'phone', errorMessages, data, translate), ['Method "lol" not found']);
+            }, methods, data.phone, 'phone', errorMessages, data, translate)).toEqual( ['Method "lol" not found']);
         });
     });
 
     describe('Validate data', () => {
         it('Validate values', () => {
             // eslint-disable-next-line max-len
-            assert.deepEqual(validateData(rules, methods, data, errorMessages, translate), {
+            expect(validateData(rules, methods, data, errorMessages, translate)).toEqual( {
                 phone: undefined,
                 phone2: [errorMessages.phone2.regexp],
             });
@@ -92,7 +90,7 @@ describe('Validate data', () => {
                 dependedInput: '',
             };
 
-            assert.deepEqual(validateData(myRules, methods, myData, errorMessages, translate), { dependedInput: ['It is required'] });
+            expect(validateData(myRules, methods, myData, errorMessages, translate)).toEqual( { dependedInput: ['It is required'] });
         });
 
         it('Validate valid values', () => {
@@ -108,43 +106,43 @@ describe('Validate data', () => {
             };
 
             // eslint-disable-next-line max-len
-            assert.deepEqual(validateData(myRules, methods, myData, errorMessages, translate), { dependedInput: undefined });
+            expect(validateData(myRules, methods, myData, errorMessages, translate)).toEqual( { dependedInput: undefined });
         });
     });
 
     describe('is Checkable', () => {
         it('Should return null without params or false', () => {
-            should(isCheckable()).equal(null);
-            should(isCheckable([], {})).equal(null);
-            should(isCheckable(false, {})).equal(null);
-            should(isCheckable([false, 'lol'], {})).equal(null);
+            expect(isCheckable()).toBe(null);
+            expect(isCheckable([], {})).toBe(null);
+            expect(isCheckable(false, {})).toBe(null);
+            expect(isCheckable([false, 'lol'], {})).toBe(null);
         });
 
         it('Should return params if params is not array', () => {
-            should(isCheckable('hello', {})).equal('hello');
-            should(isCheckable(true, {})).equal(true);
-            should(isCheckable('hello', {})).not.equal(true);
+            expect(isCheckable('hello', {})).toBe('hello');
+            expect(isCheckable(true, {})).toBe(true);
+            expect(isCheckable('hello', {})).not.toBe(true);
         });
 
         it('Should return params if params is not array', () => {
-            should(isCheckable('hello', {})).equal('hello');
-            should(isCheckable(true, {})).equal(true);
-            should(isCheckable('hello', {})).not.equal(true);
+            expect(isCheckable('hello', {})).toBe('hello');
+            expect(isCheckable(true, {})).toBe(true);
+            expect(isCheckable('hello', {})).not.toBe(true);
         });
 
         it('Should not throw error if function incorrect', () => {
-            should(() => {
+            expect(() => {
                 isCheckable([true, () => {
                     throw new Error('error');
                 }], {});
-            }).not.throw();
+            }).not.toThrow();
         });
 
         it('Should right calculate', () => {
-            should(isCheckable([true, 'one'], { one: 'value' })).equal(true);
-            should(isCheckable([true, d => !!d.one], { one: 'value' })).equal(true);
-            should(isCheckable([true, d => !!d.one, d => !d.two], { one: 'value', two: '' })).equal(true);
-            should(isCheckable([true, d => !!d.one, d => !d.two], { one: 'value', two: 'value' })).equal(null);
+            expect(isCheckable([true, 'one'], { one: 'value' })).toBe(true);
+            expect(isCheckable([true, d => !!d.one], { one: 'value' })).toBe(true);
+            expect(isCheckable([true, d => !!d.one, d => !d.two], { one: 'value', two: '' })).toBe(true);
+            expect(isCheckable([true, d => !!d.one, d => !d.two], { one: 'value', two: 'value' })).toBe(null);
         });
     });
 });

@@ -1,5 +1,3 @@
-import should from 'should';
-
 import {
     initErrorMessages,
     markField,
@@ -24,17 +22,17 @@ describe('utils', () => {
         it('should mark error', () => {
             markField(field, message, classes, ['hello']);
 
-            should(field.classList.contains('error')).be.true();
-            should(field.classList.contains('valid')).be.false();
-            should(message.innerHTML).be.equal('hello');
+            expect(field.classList.contains('error')).toBe(true);
+            expect(field.classList.contains('valid')).toBe(false);
+            expect(message.innerHTML).toBe('hello');
         });
 
         it('should mark valid', () => {
             markField(field, message, classes);
 
-            should(field.classList.contains('error')).be.false();
-            should(field.classList.contains('valid')).be.true();
-            should(message.innerHTML).be.equal('');
+            expect(field.classList.contains('error')).toBe(false);
+            expect(field.classList.contains('valid')).toBe(true);
+            expect(message.innerHTML).toBe('');
         });
     });
 
@@ -44,7 +42,7 @@ describe('utils', () => {
             const messages = {};
             const methods = {};
 
-            should(initErrorMessages(rules, messages, methods)).be.deepEqual({});
+            expect(initErrorMessages(rules, messages, methods)).toEqual({});
         });
 
         it('should get messages from messages', () => {
@@ -52,7 +50,7 @@ describe('utils', () => {
             const messages = { phone: { tel: 'hello it`s me' } };
             const methods = { tel: { message: 'hello it`s me from method' } };
 
-            should(initErrorMessages(rules, messages, methods)).be.deepEqual({
+            expect(initErrorMessages(rules, messages, methods)).toEqual({
                 phone: {
                     tel: 'hello it`s me',
                 },
@@ -64,7 +62,7 @@ describe('utils', () => {
             const messages = {};
             const methods = { tel: { message: 'hello it`s me from method' } };
 
-            should(initErrorMessages(rules, messages, methods)).be.deepEqual({
+            expect(initErrorMessages(rules, messages, methods)).toEqual({
                 phone: {
                     tel: 'hello it`s me from method',
                 },

@@ -46,50 +46,50 @@ inputs.date.value = '2017-10-12';
 
 describe('Get data', () => {
     it('createObject', () => {
-        assert.deepEqual(createObject(['parent', 'child', ''], 'value'), { parent: { child: 'value' } });
-        assert.deepEqual(createObject(['hello', '[]'], 'value'), { hello: ['value'] });
+        expect(createObject(['parent', 'child', ''], 'value')).toEqual({ parent: { child: 'value' } });
+        expect(createObject(['hello', '[]'], 'value')).toEqual({ hello: ['value'] });
     });
 
     it('getValueByPath', () => {
-        assert.deepEqual(getValueByPath(['parent', 'child'], data), 'value');
-        assert.deepEqual(getValueByPath(['parent'], undefined), ''); // todo rly?
+        expect(getValueByPath(['parent', 'child'], data)).toEqual('value');
+        expect(getValueByPath(['parent'], undefined)).toEqual(''); // todo rly?
     });
 
     it('getValueByName', () => {
-        assert.deepEqual(getValueByName('radio', data), '2');
+        expect(getValueByName('radio', data)).toEqual('2');
     });
 
     it('getRadioGroupValue', () => {
-        assert.deepEqual(getRadioGroupValue(inputs.radio), data.radio);
-        assert.deepEqual(getRadioGroupValue([
+        expect(getRadioGroupValue(inputs.radio)).toEqual(data.radio);
+        expect(getRadioGroupValue([
             createCheckableElement('radio', 2, true, 'checkbox'),
             createCheckableElement('radio', 3, true, 'checkbox'),
-        ]), ['2', '3']);
+        ])).toEqual(['2', '3']);
     });
 
     describe('getInputValue', () => {
         it('text', () => {
-            assert.deepEqual(getInputValue(inputs.phone), data.phone);
-            assert.deepEqual(getInputValue(undefined), '');
+            expect(getInputValue(inputs.phone)).toEqual(data.phone);
+            expect(getInputValue(undefined)).toEqual('');
         });
 
         it('file', () => {
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
-            assert.deepEqual(getInputValue(fileInput).length, 0);
+            expect(getInputValue(fileInput).length).toEqual(0);
         });
 
         it('select-one', () => {
             const select = document.createElement('select');
             select.innerHTML = '<option selected value="12">23</option>';
 
-            assert.deepEqual(getInputValue(select), '12');
+            expect(getInputValue(select)).toEqual('12');
         });
 
         it('select-one without options', () => {
             const select = document.createElement('select');
 
-            assert.deepEqual(getInputValue(select), '');
+            expect(getInputValue(select)).toEqual('');
         });
 
         it('select-multiple', () => {
@@ -100,24 +100,24 @@ describe('Get data', () => {
                 <option selected value="34">45</option>
             `;
 
-            assert.deepEqual(getInputValue(select), ['12', '34']);
+            expect(getInputValue(select)).toEqual(['12', '34']);
         });
 
         it('date', () => {
             const dateInput = document.createElement('date');
             dateInput.type = 'date';
             dateInput.value = '2017-10-12';
-            assert.deepEqual(getInputValue(dateInput), new Date('2017-10-12'));
+            expect(getInputValue(dateInput)).toEqual(new Date('2017-10-12'));
             dateInput.value = '';
-            assert.deepEqual(getInputValue(dateInput), '');
+            expect(getInputValue(dateInput)).toEqual('');
         });
     });
 
     it('getInputData', () => {
-        assert.deepEqual(getInputData(inputs.phone), { phone: data.phone });
+        expect(getInputData(inputs.phone)).toEqual({ phone: data.phone });
     });
 
     it('getData', () => {
-        assert.deepEqual(getData(inputs), data);
+        expect(getData(inputs)).toEqual(data);
     });
 });
