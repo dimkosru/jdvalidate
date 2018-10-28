@@ -7,14 +7,17 @@
  * @param {string} options.method - Sending options
  * @param {string|FormData} options.data - Sending options
  * @param {function} translate
+ * @param {function} RequestType
  * @returns {Promise}
  * todo rewrite to fetch
  */
-export function ajax(options, translate) {
+export function ajax(options, translate, RequestType = XMLHttpRequest) {
     return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
+        const xhr = new RequestType();
 
-        xhr.open(options.method, options.url + (options.method.toUpperCase() === 'GET' ? (`?${options.data}`) : ''), true);
+        const url = options.url + (options.method.toUpperCase() === 'GET' && options.data ? (`?${options.data}`) : '');
+
+        xhr.open(options.method, url, true);
 
         if (options.sendType === 'serialize') {
             xhr.setRequestHeader('Content-type', options.enctype);
