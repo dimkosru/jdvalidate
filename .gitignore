@@ -5,3 +5,5 @@
 /cache
 /docs
 /coverage
+/.stryker-tmp
+/reports

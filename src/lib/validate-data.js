@@ -25,7 +25,7 @@ export function isCheckable(params, data) {
             checkable = dependencies
                 .reduce((required, dependency) => (required && (typeof dependency === 'function' ? dependency(data) : !!data[dependency])), checkable);
         } catch (e) {
-            if (process.env.DEBUG) {
+            if (process.env.NODE_ENV === 'development') {
                 console.warn(`Dependency function error: ${e.toString()}`);
             }
         }

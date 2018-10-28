@@ -90,6 +90,10 @@ describe('Get options', () => {
             });
         });
 
+        it('Should return number input rules without attributes', () => {
+            expect(getInputRules(input)).toEqual({});
+        });
+
         it('Should return date input rules', () => {
             input.setAttribute('type', 'date');
             input.setAttribute('min', '2017/04/01');
@@ -99,6 +103,12 @@ describe('Get options', () => {
                 minDate: new Date('2017/04/01'),
                 maxDate: new Date('2019/04/01'),
             });
+        });
+
+        it('Should return date input rules without attributes', () => {
+            input.setAttribute('type', 'date');
+
+            expect(getInputRules(input)).toEqual({});
         });
     });
 });

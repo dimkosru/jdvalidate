@@ -27,6 +27,14 @@ describe('utils', () => {
             expect(message.innerHTML).toBe('hello');
         });
 
+        it('should mark two error', () => {
+            markField(field, message, classes, ['hello', 'hello2']);
+
+            expect(field.classList.contains('error')).toBe(true);
+            expect(field.classList.contains('valid')).toBe(false);
+            expect(message.innerHTML).toBe('hello, hello2');
+        });
+
         it('should mark valid', () => {
             markField(field, message, classes);
 

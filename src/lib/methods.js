@@ -37,7 +37,7 @@ export function email(value) {
  * @returns {boolean} - true == valid, false == invalid
  */
 export function filesize(value, size) {
-    return Array.from(value).reduce((r, file) => file.size < size && r, true);
+    return Array.from(value).reduce((r, file) => file.size <= size && r, true);
 }
 
 /**

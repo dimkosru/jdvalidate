@@ -11,6 +11,10 @@ describe('Dictionary', () => {
         });
     });
 
+    it('should default language be English', () => {
+        expect(dictionary.defaultLanguage).toEqual('en');
+    });
+
     it('should translate', () => {
         expect(dictionary.translate('Wrong url')).toEqual('Wrong url');
         expect(dictionary.translate('Wrong url', 'ru')).toEqual('Не корректный url');

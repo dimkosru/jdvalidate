@@ -14,22 +14,29 @@ const rules = {
     phone2: {
         regexp: /^\d*$/,
     },
+    empty: {
+        required: false,
+    },
 };
 
 const data = {
     phone: '92356234',
     phone2: 'sdfsefef',
+    empty: '',
 };
 
 const inputs = {
     phone: document.createElement('input'),
     phone2: document.createElement('input'),
+    empty: document.createElement('input'),
 };
 
 inputs.phone.name = 'phone';
 inputs.phone.value = data.phone;
 inputs.phone2.name = 'phone2';
 inputs.phone2.value = data.phone2;
+inputs.empty.name = 'empty';
+inputs.empty.value = data.empty;
 
 const errorMessages = {
     phone: {
@@ -52,25 +59,26 @@ describe('Validate data', () => {
     describe('Validate Field', () => {
         it('Pass correct value', () => {
             expect(validateField(rules.phone, methods, data.phone, 'phone', errorMessages, data, translate)).toEqual([]);
+            expect(validateField(rules.empty, methods, data.empty, 'empty', errorMessages, data, translate)).toEqual([]);
         });
 
         it('Pass incorrect value', () => {
-            expect(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data, translate)).toEqual( [errorMessages.phone2.regexp]);
+            expect(validateField(rules.phone2, methods, data.phone2, 'phone2', errorMessages, data, translate)).toEqual([errorMessages.phone2.regexp]);
             expect(validateField({
                 ...rules.phone,
                 url: null,
-            }, methods, 'dfsdf', 'phone', errorMessages, data, translate)).toEqual( ['Only digits available']);
+            }, methods, 'dfsdf', 'phone', errorMessages, data, translate)).toEqual(['Only digits available']);
             expect(validateField({
                 ...rules.phone,
                 lol: true,
-            }, methods, data.phone, 'phone', errorMessages, data, translate)).toEqual( ['Method "lol" not found']);
+            }, methods, data.phone, 'phone', errorMessages, data, translate)).toEqual(['Method "lol" not found']);
         });
     });
 
     describe('Validate data', () => {
         it('Validate values', () => {
             // eslint-disable-next-line max-len
-            expect(validateData(rules, methods, data, errorMessages, translate)).toEqual( {
+            expect(validateData(rules, methods, data, errorMessages, translate)).toEqual({
                 phone: undefined,
                 phone2: [errorMessages.phone2.regexp],
             });
@@ -90,7 +98,7 @@ describe('Validate data', () => {
                 dependedInput: '',
             };
 
-            expect(validateData(myRules, methods, myData, errorMessages, translate)).toEqual( { dependedInput: ['It is required'] });
+            expect(validateData(myRules, methods, myData, errorMessages, translate)).toEqual({ dependedInput: ['It is required'] });
         });
 
         it('Validate valid values', () => {
@@ -106,7 +114,7 @@ describe('Validate data', () => {
             };
 
             // eslint-disable-next-line max-len
-            expect(validateData(myRules, methods, myData, errorMessages, translate)).toEqual( { dependedInput: undefined });
+            expect(validateData(myRules, methods, myData, errorMessages, translate)).toEqual({ dependedInput: undefined });
         });
     });
 

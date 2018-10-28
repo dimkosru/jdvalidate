@@ -1,4 +1,5 @@
 import JediValidate from '../src/jedi-validate';
+import * as ajax from '../src/lib/ajax';
 
 const data = {
     phone: '92356234',
@@ -170,6 +171,15 @@ describe('Jedi Validate', () => {
             validator.handleSubmit(new Event('submit'));
 
             expect(validator.send).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('send', () => {
+        it('Should call ajax', () => {
+            const ajaxFn = jest.spyOn(ajax, 'ajax');
+            validator.send({});
+
+            expect(ajaxFn).toHaveBeenCalled();
         });
     });
 });

@@ -307,7 +307,7 @@ export default class JediValidate {
             try {
                 this.options.callbacks.error({ errors });
             } catch (e) {
-                if (process.env.DEBUG) {
+                if (process.env.NODE_ENV === 'development') {
                     console.error(e);
                 }
             }
@@ -322,7 +322,7 @@ export default class JediValidate {
             try {
                 this.options.callbacks.success({ event });
             } catch (e) {
-                if (process.env.DEBUG) {
+                if (process.env.NODE_ENV === 'development') {
                     console.error(e);
                 }
             }
@@ -360,7 +360,7 @@ export default class JediValidate {
                 try {
                     this.options.callbacks.error({ errors: response.validationErrors });
                 } catch (e) {
-                    if (process.env.DEBUG) {
+                    if (process.env.NODE_ENV === 'development') {
                         console.error(e);
                     }
                 }
@@ -384,7 +384,7 @@ export default class JediValidate {
                 try {
                     this.options.callbacks.success({ response });
                 } catch (e) {
-                    if (process.env.DEBUG) {
+                    if (process.env.NODE_ENV === 'development') {
                         console.error(e);
                     }
                 }

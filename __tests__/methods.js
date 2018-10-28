@@ -63,6 +63,7 @@ describe('Methods', () => {
         it('Should pass correct data', () => {
             expect(filesize([{ size: 10 }], 20)).toBe(true);
             expect(filesize([{ size: 10 }, { size: 15 }], 20)).toBe(true);
+            expect(filesize([{ size: 15 }], 15)).toBe(true);
         });
 
         it('Should not pass incorrect value', () => {
