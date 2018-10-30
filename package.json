@@ -15,7 +15,8 @@
         "preesdoc": "rimraf ./docs",
         "esdoc": "esdoc -c esdoc.json",
         "test": "cross-env NODE_ENV=test jest",
-        "test:coveralls": "npm run test -- --coverage --coverageReporters=text-lcov | coveralls",
+        "test:coverage": "npm run test -- --coverage",
+        "test:coveralls": "npm run test:coverage && cat ./coverage/lcov.info | coveralls",
         "stryker": "cross-env NODE_ENV=stryker stryker run"
     },
     "repository": {

@@ -4,6 +4,7 @@ node_js:
 script:
   - npm run build
   - npm run test:coveralls
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then npm run stryker; fi
 deploy:
   - provider: pages
     target-branch: gh-pages
@@ -25,6 +26,3 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-cache:
-  directories:
-    - node_modules
