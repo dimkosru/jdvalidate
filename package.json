@@ -48,13 +48,13 @@
     },
     "homepage": "https://github.com/dmitriytat/jedi-validate#readme",
     "devDependencies": {
-        "@babel/cli": "^7.1.5",
-        "@babel/core": "^7.1.6",
-        "@babel/plugin-proposal-class-properties": "^7.1.0",
-        "@babel/plugin-proposal-export-default-from": "^7.0.0",
-        "@babel/preset-env": "^7.1.6",
+        "@babel/cli": "^7.2.0",
+        "@babel/core": "^7.2.0",
+        "@babel/plugin-proposal-class-properties": "^7.2.1",
+        "@babel/plugin-proposal-export-default-from": "^7.2.0",
+        "@babel/preset-env": "^7.2.0",
         "@babel/register": "^7.0.0",
-        "@types/jest": "^23.3.9",
+        "@types/jest": "^23.3.10",
         "babel-core": "^7.0.0-bridge.0",
         "babel-eslint": "^10.0.1",
         "babel-loader": "^8.0.4",
@@ -78,20 +78,20 @@
         "lint-staged": "^8.1.0",
         "prettier": "1.15.3",
         "rimraf": "^2.6.2",
-        "stryker": "^0.32.1",
-        "stryker-api": "^0.21.5",
-        "stryker-babel-transpiler": "^0.7.8",
-        "stryker-html-reporter": "^0.16.7",
-        "stryker-javascript-mutator": "^0.11.5",
-        "stryker-jest-runner": "^1.2.7",
+        "stryker": "^0.33.1",
+        "stryker-api": "^0.22.0",
+        "stryker-babel-transpiler": "^0.7.10",
+        "stryker-html-reporter": "^0.16.9",
+        "stryker-javascript-mutator": "^0.12.1",
+        "stryker-jest-runner": "^1.2.9",
         "uglifyjs-webpack-plugin": "^2.0.1",
-        "webpack": "^4.26.0",
+        "webpack": "^4.27.1",
         "webpack-cli": "^3.1.2",
         "webpack-dev-server": "^3.1.10",
         "webpack-sources": "1.3.0"
     },
     "dependencies": {
         "@babel/polyfill": "^7.0.0",
-        "deepmerge": "^2.2.1"
+        "deepmerge": "^3.0.0"
     }
 }
