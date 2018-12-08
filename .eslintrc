@@ -1,12 +1,29 @@
 {
     "parser": "babel-eslint",
     "extends": [
+        "airbnb-base",
         "prettier"
     ],
     "plugins": [
         "prettier"
     ],
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ],
+        "prefer-promise-reject-errors": 0,
+        "no-use-before-define": 0
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "jest": true
     }
 }

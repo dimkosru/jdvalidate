@@ -118,7 +118,9 @@ export default class JediValidate {
             },
             formStatePrefix: 'jedi-',
             callbacks: {
+                // eslint-disable-next-line no-unused-vars
                 success({ event, response }) {},
+                // eslint-disable-next-line no-unused-vars
                 error({ errors }) {},
             },
             clean: true,
