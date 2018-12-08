@@ -56,11 +56,20 @@ export function markField(field, message, states, errors) {
  * @returns {Object.<string, Object.<string, string>>}
  */
 export function initErrorMessages(rules, messages, methods) {
-    return Object.keys(rules).reduce((names, name) => ({
-        ...names,
-        [name]: Object.keys(rules[name]).reduce((ruleNames, method) => ({
-            ...ruleNames,
-            [method]: (messages[name] && messages[name][method]) || (methods[method] && methods[method].message) || '',
-        }), {}),
-    }), {});
+    return Object.keys(rules).reduce(
+        (names, name) => ({
+            ...names,
+            [name]: Object.keys(rules[name]).reduce(
+                (ruleNames, method) => ({
+                    ...ruleNames,
+                    [method]:
+                        (messages[name] && messages[name][method]) ||
+                        (methods[method] && methods[method].message) ||
+                        '',
+                }),
+                {},
+            ),
+        }),
+        {},
+    );
 }

@@ -118,10 +118,8 @@ export default class JediValidate {
             },
             formStatePrefix: 'jedi-',
             callbacks: {
-                success({ event, response }) { // eslint-disable-line no-unused-vars
-                },
-                error({ errors }) { // eslint-disable-line no-unused-vars
-                },
+                success({ event, response }) {},
+                error({ errors }) {},
             },
             clean: true,
             redirect: true,
@@ -151,11 +149,7 @@ export default class JediValidate {
 
         this.ready();
 
-        this.errorMessages = initErrorMessages(
-            this.rules,
-            this.options.messages,
-            this.methods,
-        );
+        this.errorMessages = initErrorMessages(this.rules, this.options.messages, this.methods);
     }
 
     /**
@@ -167,7 +161,7 @@ export default class JediValidate {
 
         this.nodes.form.addEventListener('submit', this.handleSubmit);
 
-        Array.from(this.nodes.inputs).forEach((input) => {
+        Array.from(this.nodes.inputs).forEach(input => {
             // fixme "name" and "name in data" not the same
             // name === "phone[]",
             // data: { phone: [] } - name === "phone"
@@ -217,7 +211,7 @@ export default class JediValidate {
                 const inputRules = getInputRules(input);
                 this.rules[name] = deepmerge(inputRules, this.rules[name]);
 
-                Object.keys(this.rules[name]).forEach((rule) => {
+                Object.keys(this.rules[name]).forEach(rule => {
                     if (this.rules[name][rule]) {
                         this.fields[name].classList.add(rule);
                     }
@@ -256,12 +250,7 @@ export default class JediValidate {
             this.translate,
         );
 
-        markField(
-            this.fields[name],
-            this.messages[name],
-            this.options.states,
-            errors,
-        );
+        markField(this.fields[name], this.messages[name], this.options.states, errors);
     }
 
     /**
@@ -279,26 +268,17 @@ export default class JediValidate {
      * @private
      * @param {Event} event
      */
-    handleSubmit = (event) => {
+    handleSubmit = event => {
         this.data = getData(this.inputs);
 
-        const errors = validateData(
-            this.rules,
-            this.methods,
-            this.data,
-            this.errorMessages,
-            this.translate,
-        );
+        const errors = validateData(this.rules, this.methods, this.data, this.errorMessages, this.translate);
 
         const fieldNames = Object.keys(errors).filter(name => this.fields[name]);
 
         if (fieldNames.length !== 0) {
-            fieldNames.forEach(name => markField(
-                this.fields[name],
-                this.messages[name],
-                this.options.states,
-                errors[name],
-            ));
+            fieldNames.forEach(name =>
+                markField(this.fields[name], this.messages[name], this.options.states, errors[name]),
+            );
         }
 
         const errorFieldNames = fieldNames.filter(name => errors[name]);
@@ -355,58 +335,62 @@ export default class JediValidate {
      * @param {string|FormData} options.data
      */
     send(options) {
-        ajax(options, this.translate).then((response) => {
-            if (response.validationErrors) {
-                try {
-                    this.options.callbacks.error({ errors: response.validationErrors });
-                } catch (e) {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.error(e);
+        ajax(options, this.translate)
+            .then(response => {
+                if (response.validationErrors) {
+                    try {
+                        this.options.callbacks.error({
+                            errors: response.validationErrors,
+                        });
+                    } catch (e) {
+                        if (process.env.NODE_ENV === 'development') {
+                            console.error(e);
+                        }
                     }
-                }
 
-                if (response.validationErrors.base) {
-                    this.nodes.baseMessage.innerHTML = response.validationErrors.base.join(', ');
-                    this.root.classList.add(this.options.formStatePrefix + this.options.states.error); // eslint-disable-line max-len
-                    this.root.classList.remove(this.options.formStatePrefix + this.options.states.valid); // eslint-disable-line max-len
-                    delete response.validationErrors.base; // eslint-disable-line no-param-reassign
+                    if (response.validationErrors.base) {
+                        this.nodes.baseMessage.innerHTML = response.validationErrors.base.join(', ');
+                        this.root.classList.add(this.options.formStatePrefix + this.options.states.error);
+                        this.root.classList.remove(this.options.formStatePrefix + this.options.states.valid);
+                        delete response.validationErrors.base;
+                    } else {
+                        this.nodes.baseMessage.innerHTML = '';
+                    }
+
+                    Object.keys(response.validationErrors).forEach(name =>
+                        markField(
+                            this.fields[name],
+                            this.messages[name],
+                            this.options.states,
+                            response.validationErrors[name],
+                        ),
+                    );
                 } else {
-                    this.nodes.baseMessage.innerHTML = '';
-                }
+                    try {
+                        this.options.callbacks.success({ response });
+                    } catch (e) {
+                        if (process.env.NODE_ENV === 'development') {
+                            console.error(e);
+                        }
+                    }
 
-                Object.keys(response.validationErrors).forEach(name => markField(
-                    this.fields[name],
-                    this.messages[name],
-                    this.options.states,
-                    response.validationErrors[name],
-                ));
-            } else {
-                try {
-                    this.options.callbacks.success({ response });
-                } catch (e) {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.error(e);
+                    if (this.options.redirect && response.redirect) {
+                        window.location.href = response.redirect;
+                        return;
+                    }
+
+                    if (this.options.clean) {
+                        this.nodes.form.reset();
                     }
                 }
+            })
+            .catch(({ method, url, status, statusText }) => {
+                console.warn(`${method} ${url} ${status} (${statusText})`);
 
-                if (this.options.redirect && response.redirect) {
-                    window.location.href = response.redirect;
-                    return;
-                }
-
-                if (this.options.clean) {
-                    this.nodes.form.reset();
-                }
-            }
-        }).catch(({
-            method, url, status, statusText,
-        }) => {
-            console.warn(`${method} ${url} ${status} (${statusText})`);
-
-            this.nodes.baseMessage.innerHTML = this.translate('Can not send form!');
-            this.root.classList.add(this.options.formStatePrefix + this.options.states.error); // eslint-disable-line max-len
-            this.root.classList.remove(this.options.formStatePrefix + this.options.states.valid); // eslint-disable-line max-len
-        });
+                this.nodes.baseMessage.innerHTML = this.translate('Can not send form!');
+                this.root.classList.add(this.options.formStatePrefix + this.options.states.error);
+                this.root.classList.remove(this.options.formStatePrefix + this.options.states.valid);
+            });
     }
 
     /**
@@ -462,11 +446,7 @@ export default class JediValidate {
             message,
         };
 
-        this.errorMessages = initErrorMessages(
-            this.rules,
-            this.options.messages,
-            this.methods,
-        );
+        this.errorMessages = initErrorMessages(this.rules, this.options.messages, this.methods);
     }
 
     /**

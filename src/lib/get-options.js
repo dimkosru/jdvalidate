@@ -26,7 +26,7 @@ export function getInputRules(input) {
 
     const rules = defaultRules.reduce((inputRules, rule) => {
         const newRules = {};
-        const newRule = input.hasAttribute(rule) || input.type === rule || input.classList.contains(rule); // eslint-disable-line max-len
+        const newRule = input.hasAttribute(rule) || input.type === rule || input.classList.contains(rule);
 
         if (newRule) {
             newRules[rule] = newRule;

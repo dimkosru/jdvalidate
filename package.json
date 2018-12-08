@@ -11,6 +11,7 @@
         "build": "cross-env NODE_ENV=production webpack --progress --colors",
         "lint": "eslint src/**/*.js",
         "lint:fix": "eslint src/**/*.js --fix",
+        "prettier:format": "prettier --write \"src/**/*.js\"",
         "lint:fix-tests": "eslint __tests__/**/*.js --fix",
         "preesdoc": "rimraf ./docs",
         "esdoc": "esdoc -c esdoc.json",
@@ -26,7 +27,8 @@
     },
     "lint-staged": {
         "src/**/*.js": [
-            "eslint --fix",
+            "eslint",
+            "prettier --write",
             "git add"
         ]
     },
@@ -64,14 +66,17 @@
         "esdoc-standard-plugin": "^1.0.0",
         "eslint": "^5.9.0",
         "eslint-config-airbnb": "^17.1.0",
+        "eslint-config-prettier": "^3.3.0",
         "eslint-loader": "^2.1.1",
         "eslint-plugin-import": "^2.14.0",
         "eslint-plugin-jsx-a11y": "^6.1.2",
+        "eslint-plugin-prettier": "^3.0.0",
         "eslint-plugin-react": "^7.11.1",
         "husky": "^1.2.0",
         "jest": "^23.6.0",
         "json-loader": "^0.5.7",
         "lint-staged": "^8.1.0",
+        "prettier": "1.15.3",
         "rimraf": "^2.6.2",
         "stryker": "^0.32.1",
         "stryker-api": "^0.21.5",

@@ -15,7 +15,7 @@ export function ajax(options, translate, RequestType = XMLHttpRequest) {
     return new Promise((resolve, reject) => {
         const xhr = new RequestType();
 
-        const url = options.url + (options.method.toUpperCase() === 'GET' && options.data ? (`?${options.data}`) : '');
+        const url = options.url + (options.method.toUpperCase() === 'GET' && options.data ? `?${options.data}` : '');
 
         xhr.open(options.method, url, true);
 
@@ -33,7 +33,9 @@ export function ajax(options, translate, RequestType = XMLHttpRequest) {
                     try {
                         response = JSON.parse(xhr.responseText);
                     } catch (e) {
-                        response.validationErrors = { base: [translate('JSON parsing error')] };
+                        response.validationErrors = {
+                            base: [translate('JSON parsing error')],
+                        };
                     }
 
                     resolve(response);

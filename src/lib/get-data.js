@@ -48,7 +48,7 @@ export function getValueByName(name, data) {
  * @returns {string|Array.<string>} - value of checked input
  */
 export function getRadioGroupValue(inputs) {
-    const values = [...inputs].map(radio => getInputValue(radio)).filter(Boolean); // eslint-disable-line no-use-before-define, max-len
+    const values = [...inputs].map(radio => getInputValue(radio)).filter(Boolean);
 
     return values.length > 1 ? values : values[0];
 }
@@ -112,8 +112,5 @@ export function getInputData(input) {
  * @returns {object} - data object
  */
 export function getData(inputs) {
-    return Object.keys(inputs).reduce(
-        (data, name) => deepmerge(data, getInputData(inputs[name])),
-        {},
-    );
+    return Object.keys(inputs).reduce((data, name) => deepmerge(data, getInputData(inputs[name])), {});
 }

@@ -98,7 +98,6 @@ export function step(value, number) {
     return value % number === 0;
 }
 
-
 /**
  * Check value is greater than min date
  * @param {Date} date - current date
@@ -118,7 +117,6 @@ export function minDate(date, mindate) {
 export function maxDate(date, maxdate) {
     return date <= maxdate;
 }
-
 
 export default {
     required: {

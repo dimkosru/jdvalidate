@@ -57,8 +57,7 @@ export function convertData(data, type, FileListType = FileList, FormDataType = 
 
     switch (type) {
         case 'serialize':
-            convertedData = Object.keys(data)
-                .reduce((query, name) => `${query}${getQueryPart(name, data[name])}`, '');
+            convertedData = Object.keys(data).reduce((query, name) => `${query}${getQueryPart(name, data[name])}`, '');
             return convertedData.length ? convertedData.slice(0, -1) : '';
         case 'formData':
             return Object.keys(data).reduce((formData, name) => {

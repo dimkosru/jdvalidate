@@ -54,13 +54,9 @@ export default class Dictionary {
      * @param {Object} translations
      */
     addTranslations(translations) {
-        Object.keys(translations).forEach((language) => {
-            Object.keys(translations[language]).forEach((translation) => {
-                this.addTranslation(
-                    translation,
-                    translations[language][translation],
-                    language,
-                );
+        Object.keys(translations).forEach(language => {
+            Object.keys(translations[language]).forEach(translation => {
+                this.addTranslation(translation, translations[language][translation], language);
             });
         });
     }
