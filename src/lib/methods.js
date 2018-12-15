@@ -5,7 +5,7 @@
  */
 export function required(value) {
     if (!value) return false;
-    if (value.length !== undefined && value.length === 0) return false;
+    if (value.length === 0) return false;
     if (typeof value === 'string' && value.trim() === '') return false;
 
     return true;

@@ -156,6 +156,7 @@ describe('Methods', () => {
     describe('min date', () => {
         it('Should pass correct data', () => {
             expect(minDate(new Date('2017/10/12'), new Date('2017/10/10'))).toBe(true);
+            expect(minDate(new Date('2017/10/12'), new Date('2017/10/12'))).toBe(true);
         });
 
         it('Should not pass incorrect value', () => {
@@ -166,6 +167,7 @@ describe('Methods', () => {
     describe('max date', () => {
         it('Should pass correct data', () => {
             expect(maxDate(new Date('2017/10/12'), new Date('2017/10/12'))).toBe(true);
+            expect(maxDate(new Date('2017/10/12'), new Date('2017/10/14'))).toBe(true);
         });
 
         it('Should not pass incorrect value', () => {
