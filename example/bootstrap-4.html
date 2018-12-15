@@ -29,6 +29,62 @@
     <div class="container">
         <div class="row">
             <div
+                id="file-form"
+                class="col-sm-12 col-md-6"
+            >
+                <form
+                    action="./ajax.php"
+                    name="Bootstrap 4"
+                    method="post"
+                >
+                    <div class="text-danger"></div>
+                    <br>
+                    <div class="form-group">
+                        <label for="text">Text*</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="text"
+                            name="text"
+                            aria-describedby="textMessage"
+                            placeholder="Enter text"
+                            required
+                        >
+                        <small
+                            id="textMessage"
+                            class="text-danger form-text"
+                        ></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="file">File</label>
+                        <input
+                            type="file"
+                            class="form-control-file"
+                            id="file"
+                            name="file"
+                            aria-describedby="fileMessage"
+                        >
+                        <small
+                            id="fileMessage"
+                            class="text-danger form-text"
+                        ></small>
+                    </div>
+
+                    <br>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div
                 id="form1"
                 class="col-sm-12 col-md-6"
             >
@@ -245,7 +301,7 @@
             ajax: {
                 url: '/example/ajax.json',
                 sendType: 'formData',
-                method: 'get',
+                method: 'post',
             },
             states: {
                 error: 'is-invalid',
@@ -259,7 +315,7 @@
             },
             rules: {
                 image: {
-                    filesize: 10000,
+                    filesize: 1000000,
                     extension: 'jpg|jpeg|png|gif',
                 },
                 message: {
@@ -288,6 +344,10 @@
                 return maxLength >= value.length;
             }, 'More then max length',
         );
+
+
+        var fileFormWrapper = document.querySelector('#file-form');
+        var fileFormValidator = new JediValidate(fileFormWrapper, options);
     </script>
 </body>
 

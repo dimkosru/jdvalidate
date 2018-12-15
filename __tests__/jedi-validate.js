@@ -100,8 +100,7 @@ describe('Jedi Validate', () => {
     });
 
     it('addMethod', () => {
-        const check = () => {
-        };
+        const check = () => {};
         validator.addMethod('check', check, 'check error');
 
         expect(validator.methods.check.func).toBe(check);
@@ -180,6 +179,171 @@ describe('Jedi Validate', () => {
             validator.send({});
 
             expect(ajaxFn).toHaveBeenCalled();
+        });
+    });
+});
+
+describe('Merge options', () => {
+    it('Should merge options', () => {
+        const template = `
+            <form id="myForm4" action="./ajax.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+                <div class="parent">
+                    <label for="phoned1" class="col-sm-2 control-label">Phone:</label>
+            
+                    <div class="col-sm-10">
+                        <input name="phone" type="tel" class="form-control" id="phoned1" placeholder="Phone"
+                               required value="${data.phone}">
+                    </div>
+                </div>
+                <div class="parent">
+                    <label for="phoned2" class="col-sm-2 control-label">Phone #2:</label>
+            
+                    <div class="col-sm-10">
+                        <input name="phone2" type="tel" class="form-control" id="phoned2"
+                               placeholder="Phone #2" value="${data.phone2}">
+                    </div>
+                </div>
+                <div class="parent">
+                    <label for="phoned2" class="col-sm-2 control-label">Parent child:</label>
+            
+                    <div class="col-sm-10">
+                        <input name="parent[child]" type="text" class="form-control" id="phoned2"
+                               placeholder="Phone #2" value="${data.parent.child}">
+                    </div>
+                </div>
+                <hr/>
+                <button type="submit" class="btn  btn-lg btn-success pull-right">Send</button>
+            </form>
+            <div class="base-error alert alert-danger" role="alert" style="display: none"></div>
+        `;
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = template;
+
+        const callback = jest.fn();
+
+        const validator = new JediValidate(wrapper, {
+            ajax: {
+                url: './ajax.json',
+            },
+            containers: {
+                parent: 'parent',
+            },
+            callbacks: {
+                error: callback,
+                success: callback,
+            },
+            rules: {
+                phone: {
+                    check: true,
+                },
+            },
+            language: 'ru',
+        });
+
+        expect(validator.options).toEqual({
+            ajax: {
+                enctype: 'multipart/form-data',
+                sendType: 'formData',
+                method: 'post',
+                url: './ajax.json',
+            },
+            callbacks: {
+                error: callback,
+                success: callback,
+            },
+            clean: true,
+            containers: {
+                baseMessage: 'base-error',
+                message: 'help-block',
+                parent: 'parent',
+            },
+            formStatePrefix: 'jedi-',
+            language: 'ru',
+            messages: {},
+            redirect: true,
+            rules: {
+                phone: {
+                    check: true,
+                },
+            },
+            states: {
+                dirty: 'dirty',
+                error: 'error',
+                pristine: 'pristine',
+                valid: 'valid',
+            },
+            translations: {},
+        });
+    });
+
+    it('Should merge rules', () => {
+        const template = `
+            <form id="myForm4" action="./ajax.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+                <div class="parent">
+                    <label for="phoned1" class="col-sm-2 control-label">Phone:</label>
+            
+                    <div class="col-sm-10">
+                        <input name="phone" type="tel" class="form-control" id="phoned1" placeholder="Phone"
+                               required value="${data.phone}">
+                    </div>
+                </div>
+                <div class="parent">
+                    <label for="phoned2" class="col-sm-2 control-label">Phone #2:</label>
+            
+                    <div class="col-sm-10">
+                        <input name="phone2" type="tel" class="form-control" id="phoned2"
+                               placeholder="Phone #2" value="${data.phone2}">
+                    </div>
+                </div>
+                <div class="parent">
+                    <label for="phoned2" class="col-sm-2 control-label">Parent child:</label>
+            
+                    <div class="col-sm-10">
+                        <input name="parent[child]" type="text" class="form-control" id="phoned2"
+                               placeholder="Phone #2" value="${data.parent.child}">
+                    </div>
+                </div>
+                <hr/>
+                <button type="submit" class="btn  btn-lg btn-success pull-right">Send</button>
+            </form>
+            <div class="base-error alert alert-danger" role="alert" style="display: none"></div>
+        `;
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = template;
+
+        const callback = jest.fn();
+
+        const validator = new JediValidate(wrapper, {
+            ajax: {
+                url: './ajax.json',
+            },
+            containers: {
+                parent: 'parent',
+            },
+            callbacks: {
+                error: callback,
+                success: callback,
+            },
+            rules: {
+                phone: {
+                    check: ['phone2', true],
+                },
+            },
+            language: 'ru',
+        });
+
+        expect(validator.rules).toEqual({
+            'parent[child]': {},
+            phone: {
+                check: ['phone2', true, 'phone2', true],
+                required: true,
+                tel: true,
+            },
+            phone2: {
+                tel: true,
+            },
         });
     });
 });

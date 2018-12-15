@@ -1,5 +1,4 @@
-import deepmerge from 'deepmerge';
-
+import deepmerge from './deepmerge';
 import { convertNameToPath } from './convert-data';
 
 /**

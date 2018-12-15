@@ -1,4 +1,4 @@
-import deepmerge from 'deepmerge';
+import deepmerge from './lib/deepmerge';
 import { getData, getInputData, getValueByName } from './lib/get-data';
 import { convertData } from './lib/convert-data';
 import Dictionary from './i18n/jedi-validate-i18n';

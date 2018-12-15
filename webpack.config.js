@@ -44,20 +44,20 @@ const config = {
 };
 
 if (NODE_ENV === 'production') {
-    config.plugins.push(new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        test: /\.min\.js$/,
-        sourceMap: true,
-        extractComments: true,
-    }));
+    config.plugins.push(
+        new UglifyJsPlugin({
+            cache: true,
+            parallel: true,
+            test: /\.min\.js$/,
+            sourceMap: true,
+            extractComments: true,
+        }),
+    );
 
     config.plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
     config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
 
-    config.plugins.push(new CompressionPlugin({
-        test: /\.min\.js$/,
-    }));
+    config.plugins.push(new CompressionPlugin({ test: /\.min\.js$/ }));
 } else {
     config.plugins.push(new webpack.NamedModulesPlugin());
 }
